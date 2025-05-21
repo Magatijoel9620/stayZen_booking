@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useToast } from "@/hooks/use-toast";
 import { formatISO } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AccommodationListProps {
   searchCriteria?: AccommodationSearchCriteria; // Make searchCriteria optional
@@ -19,6 +20,31 @@ interface AccommodationListProps {
 
 // Extend Accommodation type locally to include dynamic favorite status
 type AccommodationWithFavorite = Accommodation & { isFavoritedDynamic?: boolean; isFavoriteLoading?: boolean };
+
+const AccommodationListSkeleton: React.FC = () => {
+  return (
+    <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
+      {[...Array(3)].map((_, i) => (
+        <Card key={i} className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg">
+          <Skeleton className="relative w-full h-48 rounded-t-lg" />
+          <CardHeader className="pb-2">
+            <Skeleton className="h-6 w-3/4 mb-1" /> {/* Title */}
+            <Skeleton className="h-4 w-1/4" />      {/* Badge */}
+          </CardHeader>
+          <CardContent className="flex-grow pb-2">
+            <Skeleton className="h-4 w-full mb-1" /> {/* Description line 1 */}
+            <Skeleton className="h-4 w-5/6" />       {/* Description line 2 */}
+          </CardContent>
+          <CardFooter className="flex justify-between items-center pt-2">
+            <Skeleton className="h-6 w-1/3" /> {/* Price */}
+            <Skeleton className="h-5 w-1/4" /> {/* Rating */}
+          </CardFooter>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
 
 const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria }) => {
   const [accommodations, setAccommodations] = useState<AccommodationWithFavorite[]>([]);
@@ -93,16 +119,49 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
 
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading accommodations...</div>;
+    return <AccommodationListSkeleton />;
   }
 
   if (error) {
-    return <div className="text-center py-10 text-destructive">Error: {error}</div>;
+    return (
+      <div className="text-center py-10 px-6 text-destructive bg-destructive/10 rounded-xl shadow-sm mt-6">
+        <Icons.alertTriangle className="mx-auto h-12 w-12 sm:h-16 sm:w-16 mb-4" />
+        <p className="text-xl sm:text-2xl font-semibold mb-2">Error Loading Accommodations</p>
+        <p className="text-sm sm:text-base max-w-md mx-auto mb-4">{error}</p>
+        <Button onClick={() => window.location.reload()} variant="destructive">
+          <Icons.refreshCw className="mr-2 h-4 w-4" />
+          Try Again
+        </Button>
+      </div>
+    );
   }
 
   if (accommodations.length === 0) {
-    return <div className="text-center py-10">No accommodations found.</div>;
+    return (
+      <div className="text-center py-10 px-6 text-muted-foreground bg-card border-2 border-dashed border-border/70 rounded-xl shadow-sm mt-6">
+        <Icons.search className="mx-auto h-12 w-12 sm:h-16 sm:w-16 mb-4 text-primary/50" />
+        <p className="text-xl sm:text-2xl font-semibold text-foreground mb-2">
+          No Accommodations Found
+        </p>
+        {searchCriteria ? (
+          <p className="text-sm sm:text-base max-w-md mx-auto mb-4">
+            Try adjusting your search dates or guest count.
+          </p>
+        ) : (
+          <p className="text-sm sm:text-base max-w-md mx-auto mb-4">
+            It seems we don't have any accommodations listed right now. Check back soon!
+          </p>
+        )}
+        <Link href="/all-accommodations" passHref>
+          <Button variant="outline">
+            <Icons.layoutGrid className="mr-2 h-4 w-4" />
+            View All Accommodations
+          </Button>
+        </Link>
+      </div>
+    );
   }
+
 
   const buildAccommodationLink = (accommodationId: string) => {
     if (searchCriteria && searchCriteria.checkInDate && searchCriteria.checkOutDate && searchCriteria.numberOfGuests) {
@@ -119,8 +178,8 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
       {accommodations.map((accommodation) => (
-        <Link key={accommodation.id} href={buildAccommodationLink(accommodation.id)} passHref>
-          <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer group">
+        <Link key={accommodation.id} href={buildAccommodationLink(accommodation.id)} passHref className="group">
+          <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
             <div className="relative w-full h-48">
               {accommodation.imageUrls.length > 0 && (
                 <Image
@@ -128,7 +187,7 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
                   alt={accommodation.name}
                   layout="fill"
                   objectFit="cover"
-                  className="rounded-t-lg"
+                  className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
                   data-ai-hint={accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior"}
                 />
               )}
@@ -148,7 +207,7 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
               </Button>
             </div>
             <CardHeader className="pb-2">
-              <CardTitle className="text-xl truncate">{accommodation.name}</CardTitle>
+              <CardTitle className="text-xl truncate group-hover:text-primary transition-colors">{accommodation.name}</CardTitle>
               <Badge variant="secondary" className="w-fit">{accommodation.type}</Badge>
             </CardHeader>
             <CardContent className="flex-grow pb-2">

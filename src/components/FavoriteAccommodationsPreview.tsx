@@ -16,6 +16,7 @@ const MAX_FAVORITES_TO_SHOW = 3;
 
 export default function FavoriteAccommodationsPreview() {
   const [favorites, setFavorites] = useState<Accommodation[]>([]);
+  const [totalFavoritesCount, setTotalFavoritesCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,9 +27,11 @@ export default function FavoriteAccommodationsPreview() {
       try {
         const data = await getFavoriteAccommodations();
         setFavorites(data.slice(0, MAX_FAVORITES_TO_SHOW));
+        setTotalFavoritesCount(data.length);
       } catch (err: any) {
         setError(err.message || "Failed to load favorite accommodations.");
         setFavorites([]);
+        setTotalFavoritesCount(0);
       } finally {
         setIsLoading(false);
       }
@@ -82,41 +85,54 @@ export default function FavoriteAccommodationsPreview() {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      {favorites.map((accommodation) => (
-        <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`} passHref>
-          <Card className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col cursor-pointer group">
-            <div className="relative w-full h-32 sm:h-36">
-              {accommodation.imageUrls.length > 0 ? (
-                <Image
-                  src={accommodation.imageUrls[0]}
-                  alt={accommodation.name}
-                  layout="fill"
-                  objectFit="cover"
-                  className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
-                  data-ai-hint={accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior"}
-                />
-              ) : (
-                <div className="w-full h-full bg-muted flex items-center justify-center rounded-t-lg">
-                  <Icons.image className="w-12 h-12 text-muted-foreground/50" />
-                </div>
-              )}
-            </div>
-            <CardHeader className="p-3 pb-1 flex-grow">
-              <CardTitle className="text-base font-semibold truncate group-hover:text-primary transition-colors">
-                {accommodation.name}
-              </CardTitle>
-              <Badge variant="secondary" className="text-xs mt-1 w-fit px-1.5 py-0.5">{accommodation.type}</Badge>
-            </CardHeader>
-            <CardContent className="p-3 pt-1">
-              <p className="text-sm font-medium text-primary">
-                ${accommodation.pricePerNight}
-                <span className="text-xs font-normal text-muted-foreground">/night</span>
-              </p>
-            </CardContent>
-          </Card>
-        </Link>
-      ))}
+    <div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {favorites.map((accommodation) => (
+          <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`} passHref>
+            <Card className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col cursor-pointer group">
+              <div className="relative w-full h-32 sm:h-36">
+                {accommodation.imageUrls.length > 0 ? (
+                  <Image
+                    src={accommodation.imageUrls[0]}
+                    alt={accommodation.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
+                    data-ai-hint={accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior"}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted flex items-center justify-center rounded-t-lg">
+                    <Icons.image className="w-12 h-12 text-muted-foreground/50" />
+                  </div>
+                )}
+              </div>
+              <CardHeader className="p-3 pb-1 flex-grow">
+                <CardTitle className="text-base font-semibold truncate group-hover:text-primary transition-colors">
+                  {accommodation.name}
+                </CardTitle>
+                <Badge variant="secondary" className="text-xs mt-1 w-fit px-1.5 py-0.5">{accommodation.type}</Badge>
+              </CardHeader>
+              <CardContent className="p-3 pt-1">
+                <p className="text-sm font-medium text-primary">
+                  ${accommodation.pricePerNight}
+                  <span className="text-xs font-normal text-muted-foreground">/night</span>
+                </p>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
+      {totalFavoritesCount > MAX_FAVORITES_TO_SHOW && (
+        <div className="mt-6 text-center">
+          <Link href="/favorites" passHref>
+            <Button variant="outline">
+              View All ({totalFavoritesCount}) Favorites
+              <Icons.arrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
+
