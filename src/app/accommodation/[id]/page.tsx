@@ -6,6 +6,7 @@ import { useParams, notFound, useSearchParams, useRouter } from "next/navigation
 import Image from "next/image";
 import { getAccommodationById, Accommodation } from "@/services/accommodation";
 import { createBooking } from "@/services/booking";
+import { addToFavorites, removeFromFavorites, isFavorite as checkIsFavorite } from "@/services/favorites";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,6 +26,9 @@ function AccommodationDetailContent() {
   const [accommodation, setAccommodation] = useState<Accommodation | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isBooking, setIsBooking] = useState<boolean>(false);
+  const [isFavorited, setIsFavorited] = useState<boolean>(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState<boolean>(true);
+
 
   // Booking details from query params
   const checkInQuery = searchParams.get("checkIn");
@@ -38,21 +42,46 @@ function AccommodationDetailContent() {
 
   useEffect(() => {
     if (id) {
-      const fetchAccommodation = async () => {
+      const fetchAccommodationData = async () => {
         setIsLoading(true);
+        setIsFavoriteLoading(true);
         try {
           const data = await getAccommodationById(id);
           setAccommodation(data);
+          if (data) {
+            const favoriteStatus = await checkIsFavorite(data.id);
+            setIsFavorited(favoriteStatus);
+          }
         } catch (error) {
           console.error("Failed to fetch accommodation:", error);
           setAccommodation(null);
         } finally {
           setIsLoading(false);
+          setIsFavoriteLoading(false);
         }
       };
-      fetchAccommodation();
+      fetchAccommodationData();
     }
   }, [id]);
+
+  const handleToggleFavorite = async () => {
+    if (!accommodation) return;
+    setIsFavoriteLoading(true);
+    try {
+      if (isFavorited) {
+        await removeFromFavorites(accommodation.id);
+        toast({ title: "Removed from Favorites", description: `${accommodation.name} has been removed from your favorites.` });
+      } else {
+        await addToFavorites(accommodation.id);
+        toast({ title: "Added to Favorites!", description: `${accommodation.name} has been added to your favorites.` });
+      }
+      setIsFavorited(!isFavorited);
+    } catch (error) {
+      toast({ title: "Error", description: "Could not update favorites. Please try again.", variant: "destructive" });
+    } finally {
+      setIsFavoriteLoading(false);
+    }
+  };
 
   const handleBookNow = async () => {
     if (!accommodation || !checkInDate || !checkOutDate || !numberOfGuests) {
@@ -160,15 +189,31 @@ function AccommodationDetailContent() {
           </div>
         </CardHeader>
         <div className="p-6">
-          <div className="flex flex-col md:flex-row justify-between md:items-center mb-4">
-            <div>
+          <div className="flex flex-col md:flex-row justify-between md:items-start mb-4">
+            <div className="flex-grow">
               <Badge variant="secondary" className="mb-2">{accommodation.type}</Badge>
               <CardTitle className="text-3xl font-bold">{accommodation.name}</CardTitle>
             </div>
-            <div className="flex items-center mt-2 md:mt-0">
-              <Icons.star className="h-5 w-5 text-yellow-400 fill-yellow-400 mr-1" />
-              <span className="text-lg font-semibold">{accommodation.rating}</span>
-              <span className="text-sm text-muted-foreground ml-1">({accommodation.reviewsCount} reviews)</span>
+            <div className="flex items-center mt-2 md:mt-0 space-x-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleToggleFavorite}
+                disabled={isFavoriteLoading}
+                aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}
+                className="text-destructive hover:text-destructive/80"
+              >
+                {isFavoriteLoading ? (
+                  <Icons.loader className="h-6 w-6 animate-spin" />
+                ) : (
+                  <Icons.heart className={`h-6 w-6 ${isFavorited ? "fill-destructive" : ""}`} />
+                )}
+              </Button>
+              <div className="flex items-center">
+                <Icons.star className="h-5 w-5 text-yellow-400 fill-yellow-400 mr-1" />
+                <span className="text-lg font-semibold">{accommodation.rating}</span>
+                <span className="text-sm text-muted-foreground ml-1">({accommodation.reviewsCount} reviews)</span>
+              </div>
             </div>
           </div>
           
