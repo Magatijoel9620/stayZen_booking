@@ -8,7 +8,7 @@ import {
   Copy,
   Edit,
   ExternalLink,
-  File,
+  File, // Already here, good for Booking ID
   HelpCircle,
   Home,
   Loader2,
@@ -28,13 +28,13 @@ import {
   User,
   X,
   Workflow,
-  Heart, // Added
-  Briefcase, // Added
-  Menu, // Added
-  Star, // Added for potential ratings
-  BedDouble, // Added for accommodation details
-  CalendarDays, // Added for booking details
-  Users, // Added for guest count
+  Heart,
+  Briefcase,
+  Menu,
+  Star,
+  BedDouble,
+  CalendarDays, // Already here, good for dates
+  Users, // Already here, good for guests
 } from 'lucide-react';
 
 const Icons = {
@@ -51,7 +51,7 @@ const Icons = {
   externalLink: ExternalLink,
   file: File,
   help: HelpCircle,
-  home: Home, // Was already here, confirmed
+  home: Home,
   light: Sun,
   loader: Loader2,
   mail: Mail,
@@ -66,10 +66,10 @@ const Icons = {
   shield: Shield,
   spinner: Loader2,
   trash: Trash,
-  user: User, // Was already here, confirmed
-  heart: Heart, // Added
-  briefcase: Briefcase, // Added
-  menu: Menu, // Added
+  user: User,
+  heart: Heart,
+  briefcase: Briefcase,
+  menu: Menu,
   star: Star,
   bedDouble: BedDouble,
   calendarDays: CalendarDays,

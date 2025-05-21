@@ -1,25 +1,40 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, notFound } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useParams, notFound, useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { getAccommodationById, Accommodation } from "@/services/accommodation";
+import { createBooking } from "@/services/booking";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/hooks/use-toast"; // Added
+import { useToast } from "@/hooks/use-toast";
+import { parseISO, isValid } from "date-fns";
 
-export default function AccommodationDetailPage() {
+function AccommodationDetailContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const id = params.id as string;
-  const { toast } = useToast(); // Added
+  const { toast } = useToast();
 
-  const [accommodation, setAccommodation] = useState<Accommodation | null | undefined>(undefined); // undefined for loading, null for not found
+  const [accommodation, setAccommodation] = useState<Accommodation | null | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isBooking, setIsBooking] = useState<boolean>(false);
+
+  // Booking details from query params
+  const checkInQuery = searchParams.get("checkIn");
+  const checkOutQuery = searchParams.get("checkOut");
+  const guestsQuery = searchParams.get("guests");
+
+  const checkInDate = checkInQuery && isValid(parseISO(checkInQuery)) ? parseISO(checkInQuery) : undefined;
+  const checkOutDate = checkOutQuery && isValid(parseISO(checkOutQuery)) ? parseISO(checkOutQuery) : undefined;
+  const numberOfGuests = guestsQuery ? parseInt(guestsQuery, 10) : undefined;
+
 
   useEffect(() => {
     if (id) {
@@ -30,7 +45,7 @@ export default function AccommodationDetailPage() {
           setAccommodation(data);
         } catch (error) {
           console.error("Failed to fetch accommodation:", error);
-          setAccommodation(null); // Treat error as not found for simplicity
+          setAccommodation(null);
         } finally {
           setIsLoading(false);
         }
@@ -39,11 +54,49 @@ export default function AccommodationDetailPage() {
     }
   }, [id]);
 
-  const handleBookNow = () => { // Added
-    toast({
-      title: "Booking Feature",
-      description: "Booking functionality coming soon!",
-    });
+  const handleBookNow = async () => {
+    if (!accommodation || !checkInDate || !checkOutDate || !numberOfGuests) {
+      toast({
+        title: "Booking Error",
+        description: "Missing booking details. Please ensure dates and guest count are selected.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (checkOutDate <= checkInDate) {
+      toast({
+        title: "Booking Error",
+        description: "Check-out date must be after check-in date.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsBooking(true);
+    try {
+      await createBooking({
+        accommodationId: accommodation.id,
+        userId: "user_placeholder_id", // Replace with actual user ID when auth is implemented
+        checkInDate,
+        checkOutDate,
+        numberOfGuests,
+      });
+      toast({
+        title: "Booking Confirmed!",
+        description: `Your booking for ${accommodation.name} has been confirmed.`,
+        variant: "default",
+      });
+      router.push("/bookings");
+    } catch (error: any) {
+      toast({
+        title: "Booking Failed",
+        description: error.message || "Could not complete your booking. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsBooking(false);
+    }
   };
 
   if (isLoading) {
@@ -80,13 +133,14 @@ export default function AccommodationDetailPage() {
   }
 
   if (accommodation === null) {
-    notFound(); // This will render the nearest not-found.js file or a default Next.js 404 page
+    notFound();
   }
   
-  if (!accommodation) { // Handles case where accommodation might still be undefined after loading if id was bad early
+  if (!accommodation) {
     return <div className="container mx-auto p-4 text-center">Something went wrong. Accommodation not found.</div>;
   }
 
+  const canBook = checkInDate && checkOutDate && numberOfGuests && numberOfGuests > 0;
 
   return (
     <div className="container mx-auto p-4">
@@ -99,7 +153,7 @@ export default function AccommodationDetailPage() {
                 alt={accommodation.name}
                 layout="fill"
                 objectFit="cover"
-                priority // Prioritize loading the main image
+                priority
                 data-ai-hint={accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior"}
               />
             )}
@@ -126,7 +180,18 @@ export default function AccommodationDetailPage() {
             <div>
               <h3 className="text-xl font-semibold mb-3 flex items-center"><Icons.bedDouble className="mr-2 h-5 w-5 text-primary"/>Details</h3>
               <p className="text-muted-foreground"><Icons.mapPin className="inline mr-2 h-4 w-4"/> Location: {accommodation.location.lat.toFixed(4)}, {accommodation.location.lng.toFixed(4)} (Placeholder)</p>
-              {/* Add more details like capacity, beds, baths if available in data */}
+              {checkInDate && checkOutDate && (
+                <p className="text-muted-foreground mt-1">
+                  <Icons.calendarDays className="inline mr-2 h-4 w-4" />
+                  Selected: {checkInDate.toLocaleDateString()} - {checkOutDate.toLocaleDateString()}
+                </p>
+              )}
+              {numberOfGuests && (
+                 <p className="text-muted-foreground mt-1">
+                  <Icons.users className="inline mr-2 h-4 w-4" />
+                  Guests: {numberOfGuests}
+                </p>
+              )}
             </div>
              <div>
               <h3 className="text-xl font-semibold mb-3 flex items-center"><Icons.check className="mr-2 h-5 w-5 text-primary"/>Amenities</h3>
@@ -151,15 +216,28 @@ export default function AccommodationDetailPage() {
             <Button 
               size="lg" 
               className="w-full md:w-auto bg-cta hover:bg-cta/90 text-primary-foreground"
-              onClick={handleBookNow} // Added onClick handler
+              onClick={handleBookNow}
+              disabled={!canBook || isBooking}
             >
-              <Icons.calendarDays className="mr-2 h-5 w-5" />
-              Book Now
+              {isBooking ? <Icons.loader className="mr-2 h-5 w-5 animate-spin" /> : <Icons.calendarDays className="mr-2 h-5 w-5" />}
+              {isBooking ? "Processing..." : "Book Now"}
             </Button>
           </CardFooter>
+          {!canBook && (
+            <p className="text-sm text-muted-foreground mt-2 text-center md:text-right">
+              Please select dates and guest count on the home page to enable booking.
+            </p>
+          )}
         </div>
       </Card>
     </div>
   );
 }
 
+export default function AccommodationDetailPage() {
+  return (
+    <Suspense fallback={<div className="container mx-auto p-4 text-center">Loading booking details...</div>}>
+      <AccommodationDetailContent />
+    </Suspense>
+  );
+}
