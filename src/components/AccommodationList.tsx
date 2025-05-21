@@ -3,7 +3,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Accommodation, AccommodationSearchCriteria, getAvailableAccommodations } from "@/services/accommodation";
+import { Accommodation, AccommodationSearchCriteria, getAvailableAccommodations, getAllAccommodations } from "@/services/accommodation";
 import { addToFavorites, removeFromFavorites, isFavorite as checkIsFavorite } from "@/services/favorites";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatISO } from "date-fns";
 
 interface AccommodationListProps {
-  searchCriteria: AccommodationSearchCriteria;
+  searchCriteria?: AccommodationSearchCriteria; // Make searchCriteria optional
 }
 
 // Extend Accommodation type locally to include dynamic favorite status
@@ -27,11 +27,17 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchAccommodations = async () => {
+    const fetchAccommodationsData = async () => {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await getAvailableAccommodations(searchCriteria);
+        let data: Accommodation[];
+        if (searchCriteria) {
+          data = await getAvailableAccommodations(searchCriteria);
+        } else {
+          data = await getAllAccommodations(); // Fetch all if no criteria
+        }
+        
         const accommodationsWithStatus = await Promise.all(
           data.map(async (acc) => {
             const isFav = await checkIsFavorite(acc.id);
@@ -47,7 +53,7 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
       }
     };
 
-    fetchAccommodations();
+    fetchAccommodationsData();
   }, [searchCriteria]);
 
   const handleToggleFavorite = async (e: React.MouseEvent, accommodationId: string, accommodationName: string) => {
@@ -95,19 +101,19 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
   }
 
   if (accommodations.length === 0) {
-    return <div className="text-center py-10">No accommodations found matching your criteria.</div>;
+    return <div className="text-center py-10">No accommodations found.</div>;
   }
 
   const buildAccommodationLink = (accommodationId: string) => {
-    const params = new URLSearchParams();
-    if (searchCriteria.checkInDate) {
+    if (searchCriteria && searchCriteria.checkInDate && searchCriteria.checkOutDate && searchCriteria.numberOfGuests) {
+      const params = new URLSearchParams();
       params.append("checkIn", formatISO(searchCriteria.checkInDate, { representation: 'date' }));
-    }
-    if (searchCriteria.checkOutDate) {
       params.append("checkOut", formatISO(searchCriteria.checkOutDate, { representation: 'date' }));
+      params.append("guests", searchCriteria.numberOfGuests.toString());
+      return `/accommodation/${accommodationId}?${params.toString()}`;
     }
-    params.append("guests", searchCriteria.numberOfGuests.toString());
-    return `/accommodation/${accommodationId}?${params.toString()}`;
+    // Fallback if searchCriteria or its specific properties are not available
+    return `/accommodation/${accommodationId}`;
   };
 
   return (
@@ -163,3 +169,4 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
 };
 
 export default AccommodationList;
+

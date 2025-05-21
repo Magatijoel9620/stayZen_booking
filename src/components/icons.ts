@@ -11,6 +11,7 @@ import {
   File, // Already here, good for Booking ID
   HelpCircle,
   Home,
+  LayoutGrid, // Added for All Accommodations
   Loader2,
   Mail,
   MapPin,
@@ -52,6 +53,7 @@ const Icons = {
   file: File,
   help: HelpCircle,
   home: Home,
+  layoutGrid: LayoutGrid, // Added
   light: Sun,
   loader: Loader2,
   mail: Mail,
@@ -77,3 +79,4 @@ const Icons = {
 };
 
 export {Icons};
+

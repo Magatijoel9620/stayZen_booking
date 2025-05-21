@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet"; // Added SheetTitle
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 
@@ -20,13 +20,21 @@ const BottomSheetMenu = () => {
             </Button>
           </SheetTrigger>
           <SheetContent className="sm:max-w-sm">
-            <SheetTitle className="sr-only">Navigation Menu</SheetTitle> {/* Added visually hidden title */}
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             <div className="grid gap-3 py-4">
               <Link href="/" passHref>
                 <SheetClose asChild>
                   <Button variant="outline" className="w-full justify-start">
                     <Icons.home className="mr-2 h-4 w-4" />
                     Home
+                  </Button>
+                </SheetClose>
+              </Link>
+              <Link href="/all-accommodations" passHref>
+                <SheetClose asChild>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Icons.layoutGrid className="mr-2 h-4 w-4" />
+                    All Accommodations
                   </Button>
                 </SheetClose>
               </Link>
@@ -63,3 +71,4 @@ const BottomSheetMenu = () => {
 };
 
 export default BottomSheetMenu;
+

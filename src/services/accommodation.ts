@@ -158,3 +158,15 @@ export async function getAccommodationById(id: string): Promise<Accommodation | 
     }, 300); // Simulate network delay
   });
 }
+
+/**
+ * Asynchronously retrieves all accommodations.
+ * @returns A promise that resolves to an array of all Accommodation objects.
+ */
+export async function getAllAccommodations(): Promise<Accommodation[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([...accommodations_data]);
+    }, 200); // Simulate network delay
+  });
+}
