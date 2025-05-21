@@ -76,36 +76,57 @@ export async function createBooking(input: CreateBookingInput): Promise<Booking>
     checkOutDate: input.checkOutDate,
     numberOfGuests: input.numberOfGuests,
     totalPrice: calculateTotalPrice(accommodation.pricePerNight, input.checkInDate, input.checkOutDate),
-    status: 'confirmed',
+    status: 'pending', // Default to pending for admin approval
     bookedAt: new Date(),
   };
 
-  // bookings_data should be referencing globalThis.bookings_data_store
   bookings_data.push(newBooking);
-  console.log('[Booking Service] Booking created. ID:', newBooking.id);
+  console.log('[Booking Service] Booking created with pending status. ID:', newBooking.id);
   console.log('[Booking Service] Total bookings after create (globalThis.bookings_data_store.length):', globalThis.bookings_data_store?.length);
-  console.log('[Booking Service] Current globalThis.bookings_data_store (IDs):', globalThis.bookings_data_store?.map(b => b.id));
   return newBooking;
 }
 
 /**
  * Retrieves bookings for a given user ID.
- * For now, userId is a placeholder and it will return all bookings.
+ * For "admin_user_id_placeholder", it returns all bookings.
  */
 export async function getBookingsByUserId(userId: string): Promise<Booking[]> {
   console.log(`[Booking Service] Fetching bookings for userId: ${userId}`);
-  console.log('[Booking Service] Current globalThis.bookings_data_store length at getBookingsByUserId:', globalThis.bookings_data_store?.length);
-  console.log('[Booking Service] Current globalThis.bookings_data_store IDs:', globalThis.bookings_data_store?.map(b => b.id));
   
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Directly use the global store, or the bookings_data reference to it.
       const currentBookings = globalThis.bookings_data_store || [];
-      console.log('[Booking Service] globalThis.bookings_data_store length inside setTimeout:', currentBookings.length);
-      console.log('[Booking Service] globalThis.bookings_data_store IDs inside setTimeout:', currentBookings.map(b => b.id));
+      let userBookings: Booking[];
+
+      if (userId === "admin_user_id_placeholder") {
+        userBookings = [...currentBookings]; // Admin gets all
+      } else {
+        userBookings = currentBookings.filter(b => b.userId === userId);
+      }
       
-      const sortedBookings = [...currentBookings].sort((a, b) => b.bookedAt.getTime() - a.bookedAt.getTime());
+      const sortedBookings = userBookings.sort((a, b) => b.bookedAt.getTime() - a.bookedAt.getTime());
+      console.log(`[Booking Service] Resolved ${sortedBookings.length} bookings for ${userId}.`);
       resolve(sortedBookings);
     }, 300); // Simulate network delay
+  });
+}
+
+/**
+ * Updates the status of a booking.
+ */
+export async function updateBookingStatus(bookingId: string, status: Booking['status']): Promise<Booking | undefined> {
+  console.log(`[Booking Service] Attempting to update booking ${bookingId} to status: ${status}`);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const bookingIndex = bookings_data.findIndex(b => b.id === bookingId);
+      if (bookingIndex !== -1) {
+        bookings_data[bookingIndex].status = status;
+        console.log(`[Booking Service] Booking ${bookingId} status updated to ${status}.`);
+        resolve(bookings_data[bookingIndex]);
+      } else {
+        console.error(`[Booking Service] Booking ${bookingId} not found for status update.`);
+        reject(new Error('Booking not found.'));
+      }
+    }, 200); // Simulate network delay
   });
 }

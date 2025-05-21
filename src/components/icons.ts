@@ -8,7 +8,7 @@ import {
   Copy,
   Edit,
   ExternalLink,
-  File, 
+  File,
   HelpCircle,
   Home,
   LayoutGrid,
@@ -43,6 +43,7 @@ import {
   LayoutDashboard, // For Admin Dashboard
   Hotel, // For Admin Accommodations
   Building2, // Alternative for Accommodations
+  Trash2, // For delete actions
 } from 'lucide-react';
 
 const Icons = {
@@ -75,6 +76,7 @@ const Icons = {
   shield: Shield,
   spinner: Loader2,
   trash: Trash,
+  trash2: Trash2,
   user: User,
   heart: Heart,
   briefcase: Briefcase,
@@ -93,4 +95,3 @@ const Icons = {
 };
 
 export {Icons};
-
