@@ -11,7 +11,7 @@ const BottomSheetMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-0 left-0 w-full p-4 bg-background/70 backdrop-blur-md z-50">
+    <div className="fixed bottom-0 left-0 w-full p-4 bg-background/70 z-50">
       <div className="flex justify-center">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
@@ -71,4 +71,3 @@ const BottomSheetMenu = () => {
 };
 
 export default BottomSheetMenu;
-
