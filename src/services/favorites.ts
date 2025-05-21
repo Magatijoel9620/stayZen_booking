@@ -9,18 +9,27 @@
 import type { Accommodation } from './accommodation';
 import { getAccommodationById } from './accommodation';
 
-// In-memory store for favorite accommodation IDs, keyed by userId
-// For now, we'll use a single placeholder user.
-const userFavorites: { [userId: string]: string[] } = {
-  'user_placeholder_id': [],
-};
+// Augment the global type to include our custom store for favorites
+declare global {
+  var user_favorites_store: { [userId: string]: string[] } | undefined;
+}
+
+// Initialize userFavorites using the global object
+// This helps persist the array across HMR updates in development
+if (!globalThis.user_favorites_store) {
+  console.log('[Favorites Service] Initializing globalThis.user_favorites_store');
+  globalThis.user_favorites_store = {
+    'user_placeholder_id': [],
+  };
+}
+const userFavorites: { [userId: string]: string[] } = globalThis.user_favorites_store;
+
 
 const PLACEHOLDER_USER_ID = 'user_placeholder_id';
 
 /**
  * Adds an accommodation to the user's favorites.
  * @param accommodationId The ID of the accommodation to add.
- * @param userId The ID of the user (placeholder for now).
  * @returns A promise that resolves when the operation is complete.
  */
 export async function addToFavorites(accommodationId: string): Promise<void> {
@@ -31,7 +40,8 @@ export async function addToFavorites(accommodationId: string): Promise<void> {
     if (!userFavorites[PLACEHOLDER_USER_ID].includes(accommodationId)) {
       userFavorites[PLACEHOLDER_USER_ID].push(accommodationId);
     }
-    console.log(`Favorites for ${PLACEHOLDER_USER_ID}:`, userFavorites[PLACEHOLDER_USER_ID]);
+    console.log(`[Favorites Service] Favorites for ${PLACEHOLDER_USER_ID} after add:`, userFavorites[PLACEHOLDER_USER_ID]);
+    console.log(`[Favorites Service] globalThis.user_favorites_store:`, globalThis.user_favorites_store);
     resolve();
   });
 }
@@ -39,7 +49,6 @@ export async function addToFavorites(accommodationId: string): Promise<void> {
 /**
  * Removes an accommodation from the user's favorites.
  * @param accommodationId The ID of the accommodation to remove.
- * @param userId The ID of the user (placeholder for now).
  * @returns A promise that resolves when the operation is complete.
  */
 export async function removeFromFavorites(accommodationId: string): Promise<void> {
@@ -47,7 +56,8 @@ export async function removeFromFavorites(accommodationId: string): Promise<void
     if (userFavorites[PLACEHOLDER_USER_ID]) {
       userFavorites[PLACEHOLDER_USER_ID] = userFavorites[PLACEHOLDER_USER_ID].filter(id => id !== accommodationId);
     }
-    console.log(`Favorites for ${PLACEHOLDER_USER_ID}:`, userFavorites[PLACEHOLDER_USER_ID]);
+    console.log(`[Favorites Service] Favorites for ${PLACEHOLDER_USER_ID} after remove:`, userFavorites[PLACEHOLDER_USER_ID]);
+    console.log(`[Favorites Service] globalThis.user_favorites_store:`, globalThis.user_favorites_store);
     resolve();
   });
 }
@@ -55,7 +65,6 @@ export async function removeFromFavorites(accommodationId: string): Promise<void
 /**
  * Checks if an accommodation is in the user's favorites.
  * @param accommodationId The ID of the accommodation to check.
- * @param userId The ID of the user (placeholder for now).
  * @returns A promise that resolves to true if the accommodation is a favorite, false otherwise.
  */
 export async function isFavorite(accommodationId: string): Promise<boolean> {
@@ -67,18 +76,18 @@ export async function isFavorite(accommodationId: string): Promise<boolean> {
 
 /**
  * Retrieves the list of favorite accommodation IDs for a user.
- * @param userId The ID of the user (placeholder for now).
  * @returns A promise that resolves to an array of favorite accommodation IDs.
  */
 export async function getFavoriteAccommodationIds(): Promise<string[]> {
   return new Promise((resolve) => {
+    console.log(`[Favorites Service] Getting favorite IDs for ${PLACEHOLDER_USER_ID}:`, userFavorites[PLACEHOLDER_USER_ID] || []);
+    console.log(`[Favorites Service] globalThis.user_favorites_store for user:`, globalThis.user_favorites_store?.[PLACEHOLDER_USER_ID]);
     resolve([...(userFavorites[PLACEHOLDER_USER_ID] || [])]);
   });
 }
 
 /**
  * Retrieves the full Accommodation objects for a user's favorites.
- * @param userId The ID of the user (placeholder for now).
  * @returns A promise that resolves to an array of favorite Accommodation objects.
  */
 export async function getFavoriteAccommodations(): Promise<Accommodation[]> {
@@ -91,6 +100,7 @@ export async function getFavoriteAccommodations(): Promise<Accommodation[]> {
         favoriteAccommodations.push(accommodation);
       }
     }
+    console.log(`[Favorites Service] Resolved favorite accommodations:`, favoriteAccommodations.length);
     resolve(favoriteAccommodations);
   });
 }
