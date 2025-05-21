@@ -40,6 +40,9 @@ import {
   RefreshCw,     // For "Try Again" buttons
   CalendarX,     // For "No Bookings" or "No Favorites"
   Image, // For placeholder image icon
+  LayoutDashboard, // For Admin Dashboard
+  Hotel, // For Admin Accommodations
+  Building2, // Alternative for Accommodations
 } from 'lucide-react';
 
 const Icons = {
@@ -84,6 +87,10 @@ const Icons = {
   refreshCw: RefreshCw,
   calendarX: CalendarX,
   image: Image,
+  layoutDashboard: LayoutDashboard,
+  hotel: Hotel,
+  building2: Building2,
 };
 
 export {Icons};
+
