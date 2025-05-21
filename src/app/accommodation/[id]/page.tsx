@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { parseISO, isValid } from "date-fns";
+import { parseISO, isValid, format } from "date-fns";
 
 function AccommodationDetailContent() {
   const params = useParams();
@@ -87,7 +87,7 @@ function AccommodationDetailContent() {
     if (!accommodation || !checkInDate || !checkOutDate || !numberOfGuests) {
       toast({
         title: "Booking Error",
-        description: "Missing booking details. Please ensure dates and guest count are selected.",
+        description: "Missing booking details. Please ensure dates and guest count are selected from the home page.",
         variant: "destructive",
       });
       return;
@@ -130,31 +130,36 @@ function AccommodationDetailContent() {
 
   if (isLoading) {
     return (
-      <Card className="shadow-lg">
-        <CardHeader>
-          <Skeleton className="h-8 w-3/4" />
-          <Skeleton className="h-4 w-1/4 mt-2" />
+      <Card className="shadow-lg overflow-hidden">
+        <CardHeader className="p-0">
+          <Skeleton className="h-64 sm:h-72 md:h-96 w-full" />
         </CardHeader>
-        <div className="relative w-full h-96">
-          <Skeleton className="h-full w-full rounded-md" />
-        </div>
-        <CardContent className="mt-4 space-y-4">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-5/6" />
-          <Skeleton className="h-4 w-4/6" />
-          <Separator />
-          <Skeleton className="h-6 w-1/3" />
-          <div className="grid grid-cols-2 gap-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-full" />
+        <div className="p-6">
+          <Skeleton className="h-8 w-3/4 mb-2" />
+          <Skeleton className="h-4 w-1/4 mb-4" />
+          <Skeleton className="h-4 w-full mb-1" />
+          <Skeleton className="h-4 w-5/6 mb-6" />
+          <Separator className="my-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <Skeleton className="h-6 w-1/3 mb-3" />
+              <Skeleton className="h-4 w-full mb-1" />
+              <Skeleton className="h-4 w-3/4 mb-1" />
+              <Skeleton className="h-4 w-1/2" />
+            </div>
+            <div>
+              <Skeleton className="h-6 w-1/3 mb-3" />
+              <Skeleton className="h-4 w-full mb-1" />
+              <Skeleton className="h-4 w-full mb-1" />
+              <Skeleton className="h-4 w-full" />
+            </div>
           </div>
-        </CardContent>
-        <CardFooter>
-          <Skeleton className="h-10 w-1/4" />
-          <Skeleton className="h-10 w-1/3 ml-auto" />
-        </CardFooter>
+          <Separator className="my-6" />
+          <CardFooter className="p-0 flex flex-col md:flex-row justify-between items-center gap-4">
+            <Skeleton className="h-10 w-1/3" />
+            <Skeleton className="h-12 w-full md:w-1/3" />
+          </CardFooter>
+        </div>
       </Card>
     );
   }
@@ -172,7 +177,7 @@ function AccommodationDetailContent() {
   return (
     <Card className="shadow-lg overflow-hidden">
       <CardHeader className="p-0">
-        <div className="relative w-full h-72 md:h-96">
+        <div className="relative w-full h-64 sm:h-72 md:h-96">
           {accommodation.imageUrls.length > 0 && (
             <Image
               src={accommodation.imageUrls[0]}
@@ -185,13 +190,13 @@ function AccommodationDetailContent() {
           )}
         </div>
       </CardHeader>
-      <div className="p-6">
-        <div className="flex flex-col md:flex-row justify-between md:items-start mb-4">
+      <div className="p-4 md:p-6">
+        <div className="flex flex-col md:flex-row justify-between md:items-start mb-4 gap-4">
           <div className="flex-grow">
             <Badge variant="secondary" className="mb-2">{accommodation.type}</Badge>
-            <CardTitle className="text-3xl font-bold">{accommodation.name}</CardTitle>
+            <CardTitle className="text-2xl sm:text-3xl font-bold">{accommodation.name}</CardTitle>
           </div>
-          <div className="flex items-center mt-2 md:mt-0 space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 mt-2 md:mt-0 shrink-0">
             <Button
               variant="ghost"
               size="icon"
@@ -201,59 +206,59 @@ function AccommodationDetailContent() {
               className="text-destructive hover:text-destructive/80"
             >
               {isFavoriteLoading ? (
-                <Icons.loader className="h-6 w-6 animate-spin" />
+                <Icons.loader className="h-5 w-5 sm:h-6 sm:w-6 animate-spin" />
               ) : (
-                <Icons.heart className={`h-6 w-6 ${isFavorited ? "fill-destructive" : ""}`} />
+                <Icons.heart className={`h-5 w-5 sm:h-6 sm:w-6 ${isFavorited ? "fill-destructive" : ""}`} />
               )}
             </Button>
             <div className="flex items-center">
-              <Icons.star className="h-5 w-5 text-yellow-400 fill-yellow-400 mr-1" />
-              <span className="text-lg font-semibold">{accommodation.rating}</span>
-              <span className="text-sm text-muted-foreground ml-1">({accommodation.reviewsCount} reviews)</span>
+              <Icons.star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-yellow-400 mr-1" />
+              <span className="text-base sm:text-lg font-semibold">{accommodation.rating}</span>
+              <span className="text-xs sm:text-sm text-muted-foreground ml-1">({accommodation.reviewsCount} reviews)</span>
             </div>
           </div>
         </div>
         
-        <CardDescription className="text-base mb-6">{accommodation.description}</CardDescription>
+        <CardDescription className="text-sm sm:text-base mb-6">{accommodation.description}</CardDescription>
         
         <Separator className="my-6" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
-            <h3 className="text-xl font-semibold mb-3 flex items-center"><Icons.bedDouble className="mr-2 h-5 w-5 text-primary"/>Details</h3>
-            <p className="text-muted-foreground"><Icons.mapPin className="inline mr-2 h-4 w-4"/> Location: {accommodation.location.lat.toFixed(4)}, {accommodation.location.lng.toFixed(4)} (Placeholder)</p>
+            <h3 className="text-lg sm:text-xl font-semibold mb-3 flex items-center"><Icons.bedDouble className="mr-2 h-5 w-5 text-primary"/>Property Details</h3>
+            <p className="text-sm text-muted-foreground"><Icons.mapPin className="inline mr-2 h-4 w-4"/> Location: {accommodation.location.lat.toFixed(4)}, {accommodation.location.lng.toFixed(4)} (Placeholder)</p>
             {checkInDate && checkOutDate && (
-              <p className="text-muted-foreground mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 <Icons.calendarDays className="inline mr-2 h-4 w-4" />
-                Selected: {checkInDate.toLocaleDateString()} - {checkOutDate.toLocaleDateString()}
+                Selected: {format(checkInDate, "PPP")} - {format(checkOutDate, "PPP")}
               </p>
             )}
             {numberOfGuests && (
-               <p className="text-muted-foreground mt-1">
+               <p className="text-sm text-muted-foreground mt-1">
                 <Icons.users className="inline mr-2 h-4 w-4" />
                 Guests: {numberOfGuests}
               </p>
             )}
           </div>
            <div>
-            <h3 className="text-xl font-semibold mb-3 flex items-center"><Icons.check className="mr-2 h-5 w-5 text-primary"/>Amenities</h3>
-            <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-muted-foreground">
+            <h3 className="text-lg sm:text-xl font-semibold mb-3 flex items-center"><Icons.check className="mr-2 h-5 w-5 text-primary"/>Amenities</h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 text-sm text-muted-foreground">
               {accommodation.amenities.slice(0, 6).map(amenity => (
                 <li key={amenity} className="flex items-center">
                   <Icons.check className="h-4 w-4 mr-2 text-green-500" /> {amenity}
                 </li>
               ))}
             </ul>
-             {accommodation.amenities.length > 6 && <p className="text-sm text-muted-foreground mt-1">+ {accommodation.amenities.length -6} more</p>}
+             {accommodation.amenities.length > 6 && <p className="text-xs text-muted-foreground mt-1">+ {accommodation.amenities.length -6} more</p>}
           </div>
         </div>
 
         <Separator className="my-6" />
 
         <CardFooter className="p-0 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-3xl font-bold text-primary">
+          <p className="text-2xl sm:text-3xl font-bold text-primary">
             ${accommodation.pricePerNight}
-            <span className="text-base font-normal text-muted-foreground">/night</span>
+            <span className="text-sm sm:text-base font-normal text-muted-foreground">/night</span>
           </p>
           <Button 
             size="lg" 
@@ -266,7 +271,7 @@ function AccommodationDetailContent() {
           </Button>
         </CardFooter>
         {!canBook && (
-          <p className="text-sm text-muted-foreground mt-2 text-center md:text-right">
+          <p className="text-xs sm:text-sm text-muted-foreground mt-2 text-center md:text-right">
             Please select dates and guest count on the home page to enable booking.
           </p>
         )}
@@ -277,7 +282,7 @@ function AccommodationDetailContent() {
 
 export default function AccommodationDetailPage() {
   return (
-    <Suspense fallback={<div className="text-center">Loading booking details...</div>}>
+    <Suspense fallback={<div className="text-center py-10"><Icons.loader className="h-8 w-8 animate-spin text-primary mx-auto mb-2" />Loading booking details...</div>}>
       <AccommodationDetailContent />
     </Suspense>
   );

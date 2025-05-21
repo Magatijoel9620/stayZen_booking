@@ -8,10 +8,10 @@ import {
   Copy,
   Edit,
   ExternalLink,
-  File, // Already here, good for Booking ID
+  File, 
   HelpCircle,
   Home,
-  LayoutGrid, // Added for All Accommodations
+  LayoutGrid,
   Loader2,
   Mail,
   MapPin,
@@ -34,8 +34,11 @@ import {
   Menu,
   Star,
   BedDouble,
-  CalendarDays, // Already here, good for dates
-  Users, // Already here, good for guests
+  CalendarDays,
+  Users,
+  AlertTriangle, // For error states
+  RefreshCw,     // For "Try Again" buttons
+  CalendarX,     // For "No Bookings" or "No Favorites"
 } from 'lucide-react';
 
 const Icons = {
@@ -53,7 +56,7 @@ const Icons = {
   file: File,
   help: HelpCircle,
   home: Home,
-  layoutGrid: LayoutGrid, // Added
+  layoutGrid: LayoutGrid,
   light: Sun,
   loader: Loader2,
   mail: Mail,
@@ -76,7 +79,9 @@ const Icons = {
   bedDouble: BedDouble,
   calendarDays: CalendarDays,
   users: Users,
+  alertTriangle: AlertTriangle,
+  refreshCw: RefreshCw,
+  calendarX: CalendarX,
 };
 
 export {Icons};
-

@@ -38,18 +38,23 @@ export default function BookingsPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center py-10">
+      <div className="flex flex-col items-center justify-center py-10">
         <Icons.loader className="h-8 w-8 animate-spin text-primary" />
-        <p className="ml-2 text-muted-foreground">Loading your bookings...</p>
+        <p className="mt-2 text-muted-foreground">Loading your bookings...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center text-destructive">
-        <p>Error loading bookings: {error}</p>
-        <Button onClick={() => window.location.reload()} className="mt-4">Try Again</Button>
+      <div className="text-center text-destructive py-10">
+        <Icons.alertTriangle className="h-12 w-12 mx-auto mb-4 text-destructive" />
+        <p className="text-xl font-semibold">Error loading bookings</p>
+        <p className="text-muted-foreground mb-4">{error}</p>
+        <Button onClick={() => window.location.reload()} className="mt-4">
+          <Icons.refreshCw className="mr-2 h-4 w-4" />
+          Try Again
+        </Button>
       </div>
     );
   }
@@ -57,16 +62,17 @@ export default function BookingsPage() {
   return (
     <>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold flex items-center">
-          <Icons.briefcase className="mr-3 h-8 w-8 text-primary" />
+        <h1 className="text-2xl sm:text-3xl font-bold flex items-center">
+          <Icons.briefcase className="mr-3 h-7 w-7 sm:h-8 sm:w-8 text-primary" />
           My Bookings
         </h1>
       </div>
 
       {bookings.length === 0 ? (
-        <Card className="shadow-lg text-center">
-          <CardHeader>
-            <CardTitle>No Bookings Yet</CardTitle>
+        <Card className="shadow-lg text-center py-10">
+          <CardHeader className="pt-0">
+            <Icons.calendarX className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+            <CardTitle className="text-2xl">No Bookings Yet</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">
@@ -83,9 +89,9 @@ export default function BookingsPage() {
       ) : (
         <div className="space-y-6">
           {bookings.map((booking) => (
-            <Card key={booking.id} className="shadow-lg overflow-hidden">
+            <Card key={booking.id} className="shadow-lg overflow-hidden transition-shadow hover:shadow-xl">
               <div className="md:flex">
-                <div className="md:w-1/3 relative h-48 md:h-auto">
+                <div className="md:w-1/3 relative h-48 md:h-auto min-h-[150px] md:min-h-full">
                   <Image
                     src={booking.accommodationImage || 'https://placehold.co/400x300.png'}
                     alt={booking.accommodationName}
@@ -95,50 +101,51 @@ export default function BookingsPage() {
                     data-ai-hint="hotel room"
                   />
                 </div>
-                <div className="md:w-2/3">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
+                <div className="md:w-2/3 p-4 sm:p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-2">
                       <div>
-                        <Badge variant={booking.status === 'confirmed' ? 'default' : 'secondary'} className="mb-1 capitalize bg-green-500 text-white">
+                        <Badge 
+                          variant={booking.status === 'confirmed' ? 'default' : 'secondary'} 
+                          className={`capitalize text-xs px-2 py-1 ${booking.status === 'confirmed' ? 'bg-green-500 text-white' : ''}`}
+                        >
                           {booking.status}
                         </Badge>
-                        <CardTitle className="text-2xl hover:text-primary">
-                           <Link href={`/accommodation/${booking.accommodationId}`}>
+                        <CardTitle className="text-xl sm:text-2xl mt-1 hover:text-primary transition-colors">
+                           <Link href={`/accommodation/${booking.accommodationId}?checkIn=${format(new Date(booking.checkInDate), 'yyyy-MM-dd')}&checkOut=${format(new Date(booking.checkOutDate), 'yyyy-MM-dd')}&guests=${booking.numberOfGuests}`}>
                             {booking.accommodationName}
                            </Link>
                         </CardTitle>
                       </div>
-                       <p className="text-lg font-semibold text-primary whitespace-nowrap">
+                       <p className="text-lg sm:text-xl font-semibold text-primary whitespace-nowrap pt-1">
                         ${booking.totalPrice.toFixed(2)}
                       </p>
                     </div>
-                     <CardDescription>
+                     <CardDescription className="text-xs sm:text-sm mb-4">
                       Booked on: {format(new Date(booking.bookedAt), "PPP p")}
                     </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                      <div>
-                        <p className="font-medium flex items-center"><Icons.calendarDays className="mr-2 h-4 w-4 text-muted-foreground"/>Check-in</p>
-                        <p className="text-muted-foreground">{format(new Date(booking.checkInDate), "EEE, MMM d, yyyy")}</p>
-                      </div>
-                      <div>
-                        <p className="font-medium flex items-center"><Icons.calendarDays className="mr-2 h-4 w-4 text-muted-foreground"/>Check-out</p>
-                        <p className="text-muted-foreground">{format(new Date(booking.checkOutDate), "EEE, MMM d, yyyy")}</p>
-                      </div>
-                      <div>
-                        <p className="font-medium flex items-center"><Icons.users className="mr-2 h-4 w-4 text-muted-foreground"/>Guests</p>
-                        <p className="text-muted-foreground">{booking.numberOfGuests}</p>
-                      </div>
-                       <div>
-                        <p className="font-medium flex items-center"><Icons.file className="mr-2 h-4 w-4 text-muted-foreground"/>Booking ID</p>
-                        <p className="text-muted-foreground truncate">{booking.id}</p>
-                      </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-sm mb-4">
+                    <div>
+                      <p className="font-medium flex items-center text-xs text-muted-foreground"><Icons.calendarDays className="mr-1.5 h-3.5 w-3.5"/>Check-in</p>
+                      <p className="text-foreground">{format(new Date(booking.checkInDate), "EEE, MMM d, yyyy")}</p>
                     </div>
-                  </CardContent>
-                   <CardFooter>
-                     {/* Add actions like "Cancel Booking" or "View Details" if needed later */}
-                      <Button variant="outline" size="sm" disabled>Manage Booking (Soon)</Button>
+                    <div>
+                      <p className="font-medium flex items-center text-xs text-muted-foreground"><Icons.calendarDays className="mr-1.5 h-3.5 w-3.5"/>Check-out</p>
+                      <p className="text-foreground">{format(new Date(booking.checkOutDate), "EEE, MMM d, yyyy")}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium flex items-center text-xs text-muted-foreground"><Icons.users className="mr-1.5 h-3.5 w-3.5"/>Guests</p>
+                      <p className="text-foreground">{booking.numberOfGuests}</p>
+                    </div>
+                     <div>
+                      <p className="font-medium flex items-center text-xs text-muted-foreground"><Icons.file className="mr-1.5 h-3.5 w-3.5"/>Booking ID</p>
+                      <p className="text-foreground truncate" title={booking.id}>{booking.id}</p>
+                    </div>
+                  </div>
+                   <CardFooter className="p-0 pt-2 border-t border-border/50">
+                      <Button variant="outline" size="sm" disabled className="mt-4 w-full sm:w-auto">Manage Booking (Soon)</Button>
                   </CardFooter>
                 </div>
               </div>
