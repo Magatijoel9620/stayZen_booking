@@ -1,7 +1,7 @@
 
 # StayZen - Accommodation Booking App
 
-This is a Next.js web application for finding and booking accommodations, built with Firebase Studio.
+This is a Next.js web application for finding and booking accommodations, built with Firebase Studio. It includes a user-facing application for browsing and booking, and an admin dashboard for managing properties and bookings.
 
 ## Tech Stack
 
@@ -11,23 +11,50 @@ This is a Next.js web application for finding and booking accommodations, built 
 *   **Styling**: Tailwind CSS
 *   **State Management (UI)**: React Hooks (useState, useEffect, useContext)
 *   **Data Fetching/Mutation (UI)**: Async/await with services, React Hooks
-*   **In-memory Data Store**: For services (accommodations, bookings, favorites) using globalThis for persistence in development.
-*   **Generative AI**: Genkit (not currently used but configured)
+*   **In-memory Data Store**: For services (accommodations, bookings, favorites) using `globalThis` for persistence in development.
+*   **Generative AI**: Genkit (configured but not currently used for core features)
+*   **Forms (Admin)**: React Hook Form with Zod for validation
 *   **Linting/Formatting**: ESLint, Prettier (implicitly via Next.js defaults)
 *   **Icons**: Lucide React
+*   **Theme**: Light/Dark mode with `next-themes`
 
 ## Features
 
-*   Browse all accommodations.
-*   Search for accommodations based on dates and number of guests.
-*   View detailed information for each accommodation.
-*   Book accommodations.
-*   View a list of personal bookings.
-*   Add/remove accommodations from a favorites list.
-*   View a list of favorite accommodations.
-*   Responsive design for various screen sizes.
-*   Light and Dark mode theme toggling.
-*   Floating navigation menu for easy access to different sections.
+### User-Facing Application:
+*   **Browse Accommodations**: View all available accommodations or search based on dates and number of guests.
+*   **Detailed View**: Click on an accommodation to see detailed information, including images, description, amenities, price, and rating.
+*   **Booking System**:
+    *   Select check-in/check-out dates and number of guests.
+    *   Book accommodations with a simulated booking process.
+    *   View a list of personal bookings with status (pending, confirmed, cancelled).
+*   **Favorites**:
+    *   Add/remove accommodations from a personal favorites list.
+    *   View a list of favorite accommodations.
+    *   Quickly add/remove favorites from accommodation list and detail views.
+*   **Profile Page**:
+    *   Simulated profile editing (name, email).
+    *   Simulated password change.
+    *   Simulated notification preferences.
+    *   Simulated logout.
+*   **Responsive Design**: Adapts to various screen sizes.
+*   **Theme Toggling**: Switch between light and dark modes.
+*   **Floating Navigation Menu**: Easy access to Home, All Accommodations, My Bookings, Favorites, and Profile.
+*   **Hero Section**: Engaging hero section on the homepage.
+*   **Favorites Preview**: See a preview of favorite accommodations on the homepage.
+
+### Admin Dashboard (`/admin`):
+*   **Separate Admin Layout**: Dedicated sidebar navigation for admin tasks.
+*   **Dashboard Overview**: Placeholder for key metrics.
+*   **Accommodation Management**:
+    *   View all accommodations in a table.
+    *   Add new accommodations via a form with validation.
+    *   Edit existing accommodations.
+    *   Delete accommodations with a confirmation dialog.
+*   **Booking Management**:
+    *   View all customer bookings in a table.
+    *   Approve pending bookings.
+    *   Cancel bookings.
+*   **Theme Toggling**: Available in the admin panel as well.
 
 ## Getting Started
 
@@ -71,16 +98,21 @@ This is a Next.js web application for finding and booking accommodations, built 
         # or for watching changes
         npm run genkit:watch
         ```
+    Access the admin dashboard by navigating to `/admin/dashboard` after starting the app.
 
 ## Project Structure
 
 *   `src/app/`: Contains the pages and layouts (using Next.js App Router).
-*   `src/components/`: Contains reusable React components, including ShadCN UI components.
-*   `src/services/`: Contains modules for interacting with data (e.g., accommodations, bookings, favorites).
+    *   `src/app/admin/`: Contains pages and layout for the admin dashboard.
+*   `src/components/`: Contains reusable React components.
+    *   `src/components/ui/`: ShadCN UI components.
+    *   `src/components/admin/`: Components specific to the admin dashboard.
+*   `src/services/`: Contains modules for interacting with data (e.g., accommodations, bookings, favorites). Uses in-memory `globalThis` for persistence during development.
 *   `src/ai/`: Contains Genkit related AI flows and configurations.
-*   `src/hooks/`: Custom React hooks.
-*   `src/lib/`: Utility functions.
+*   `src/hooks/`: Custom React hooks (e.g., `useToast`, `useIsMobile`).
+*   `src/lib/`: Utility functions (e.g., `cn` for classnames).
 *   `public/`: Static assets.
+*   `src/metadata.ts`: Centralized metadata configuration for pages.
 
 ## Available Scripts
 
@@ -94,9 +126,13 @@ This is a Next.js web application for finding and booking accommodations, built 
 
 ## Further Development
 
-*   Implement user authentication.
+*   Implement actual user authentication (e.g., Firebase Authentication).
 *   Replace in-memory data stores with a persistent database (e.g., Firebase Firestore).
-*   Integrate actual payment processing.
-*   Expand Genkit AI features (e.g., personalized recommendations, travel planning).
-*   Add more detailed error handling and user feedback.
-*   Implement comprehensive testing.
+*   Integrate actual payment processing for bookings.
+*   Expand Genkit AI features (e.g., personalized recommendations, AI-generated descriptions, travel planning tools).
+*   Add more detailed error handling and user feedback across the application.
+*   Implement comprehensive testing (unit, integration, e2e).
+*   Enhance admin dashboard with user management, analytics, and more detailed controls.
+*   Refine UI/UX details and add animations/transitions for a more polished feel.
+*   Implement image uploading for accommodations instead of URL inputs.
+```
