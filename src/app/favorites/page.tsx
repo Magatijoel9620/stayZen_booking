@@ -60,7 +60,7 @@ export default function FavoritesPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
+      <>
         <h1 className="text-3xl font-bold flex items-center mb-6">
           <Icons.heart className="mr-3 h-8 w-8 text-destructive fill-destructive" />
           My Favorites
@@ -84,13 +84,13 @@ export default function FavoritesPage() {
             </Card>
           ))}
         </div>
-      </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto p-4 text-center text-destructive">
+      <div className="text-center text-destructive">
         <p>Error loading favorites: {error}</p>
         <Button onClick={fetchFavorites} className="mt-4">Try Again</Button>
       </div>
@@ -98,7 +98,7 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold flex items-center">
           <Icons.heart className="mr-3 h-8 w-8 text-destructive fill-destructive" />
@@ -168,6 +168,6 @@ export default function FavoritesPage() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }

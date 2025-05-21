@@ -2,7 +2,8 @@
 import type {Metadata} from 'next';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"; // Added
+import { Toaster } from "@/components/ui/toaster";
+import BottomSheetMenu from '@/components/BottomSheetMenu'; // Import BottomSheetMenu
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -27,8 +28,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
-        <Toaster /> {/* Added Toaster for global notifications */}
+        <div className="flex flex-col min-h-screen">
+          <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 p-4">
+            <div className="container mx-auto">
+              <h1 className="text-2xl font-bold text-primary">StayFinder</h1>
+              {/* You can add more header elements here, like a logo or user icon */}
+            </div>
+          </header>
+          <main className="flex-1 container mx-auto p-4">
+            {children}
+          </main>
+          <BottomSheetMenu />
+          <Toaster />
+        </div>
       </body>
     </html>
   );

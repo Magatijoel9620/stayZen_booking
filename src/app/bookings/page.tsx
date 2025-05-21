@@ -38,18 +38,16 @@ export default function BookingsPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="flex items-center justify-center py-10">
-          <Icons.loader className="h-8 w-8 animate-spin text-primary" />
-          <p className="ml-2 text-muted-foreground">Loading your bookings...</p>
-        </div>
+      <div className="flex items-center justify-center py-10">
+        <Icons.loader className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-2 text-muted-foreground">Loading your bookings...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto p-4 text-center text-destructive">
+      <div className="text-center text-destructive">
         <p>Error loading bookings: {error}</p>
         <Button onClick={() => window.location.reload()} className="mt-4">Try Again</Button>
       </div>
@@ -57,7 +55,7 @@ export default function BookingsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold flex items-center">
           <Icons.briefcase className="mr-3 h-8 w-8 text-primary" />
@@ -148,7 +146,6 @@ export default function BookingsPage() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
-
