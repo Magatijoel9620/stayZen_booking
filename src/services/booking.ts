@@ -38,38 +38,37 @@ function calculateTotalPrice(pricePerNight: number, checkIn: Date, checkOut: Dat
  * Creates a new booking.
  */
 export async function createBooking(input: CreateBookingInput): Promise<Booking> {
-  return new Promise(async (resolve, reject) => {
-    const accommodation = await getAccommodationById(input.accommodationId);
-    if (!accommodation) {
-      return reject(new Error('Accommodation not found.'));
-    }
+  const accommodation = await getAccommodationById(input.accommodationId);
+  if (!accommodation) {
+    throw new Error('Accommodation not found.');
+  }
 
-    if (input.checkOutDate <= input.checkInDate) {
-      return reject(new Error('Check-out date must be after check-in date.'));
-    }
-    if (input.numberOfGuests <= 0) {
-      return reject(new Error('Number of guests must be at least 1.'));
-    }
+  if (input.checkOutDate <= input.checkInDate) {
+    throw new Error('Check-out date must be after check-in date.');
+  }
+  if (input.numberOfGuests <= 0) {
+    throw new Error('Number of guests must be at least 1.');
+  }
 
-    const newBooking: Booking = {
-      id: Math.random().toString(36).substr(2, 9), // simple unique ID
-      accommodationId: input.accommodationId,
-      accommodationName: accommodation.name,
-      accommodationImage: accommodation.imageUrls.length > 0 ? accommodation.imageUrls[0] : 'https://placehold.co/600x400.png',
-      userId: input.userId,
-      checkInDate: input.checkInDate,
-      checkOutDate: input.checkOutDate,
-      numberOfGuests: input.numberOfGuests,
-      totalPrice: calculateTotalPrice(accommodation.pricePerNight, input.checkInDate, input.checkOutDate),
-      status: 'confirmed',
-      bookedAt: new Date(),
-    };
+  const newBooking: Booking = {
+    id: Math.random().toString(36).substr(2, 9), // simple unique ID
+    accommodationId: input.accommodationId,
+    accommodationName: accommodation.name,
+    accommodationImage: accommodation.imageUrls.length > 0 ? accommodation.imageUrls[0] : 'https://placehold.co/600x400.png',
+    userId: input.userId,
+    checkInDate: input.checkInDate,
+    checkOutDate: input.checkOutDate,
+    numberOfGuests: input.numberOfGuests,
+    totalPrice: calculateTotalPrice(accommodation.pricePerNight, input.checkInDate, input.checkOutDate),
+    status: 'confirmed',
+    bookedAt: new Date(),
+  };
 
-    bookings_data.push(newBooking);
-    console.log('Booking created:', newBooking);
-    console.log('All bookings:', bookings_data);
-    resolve(newBooking);
-  });
+  bookings_data.push(newBooking);
+  console.log('[Booking Service] Booking created. ID:', newBooking.id);
+  console.log('[Booking Service] Total bookings after create:', bookings_data.length);
+  // console.log('[Booking Service] All booking IDs after create:', bookings_data.map(b => b.id));
+  return newBooking;
 }
 
 /**
@@ -77,12 +76,19 @@ export async function createBooking(input: CreateBookingInput): Promise<Booking>
  * For now, userId is a placeholder and it will return all bookings.
  */
 export async function getBookingsByUserId(userId: string): Promise<Booking[]> {
-  console.log(`Fetching bookings for userId: ${userId} (currently returning all)`);
-  // Simulate network delay
+  console.log(`[Booking Service] Fetching bookings for userId: ${userId}`);
+  console.log('[Booking Service] Current total bookings at getBookingsByUserId:', bookings_data.length);
+  // console.log('[Booking Service] All booking IDs at getBookingsByUserId:', bookings_data.map(b => b.id));
+  
+  // Create a new array from bookings_data to ensure it's the latest snapshot before timeout
+  const currentBookingsSnapshot = [...bookings_data];
+
   return new Promise((resolve) => {
     setTimeout(() => {
-      // In a real app, you'd filter by userId
-      resolve([...bookings_data].sort((a, b) => b.bookedAt.getTime() - a.bookedAt.getTime()));
-    }, 300);
+      // Sort the snapshot taken before the timeout
+      const sortedBookings = currentBookingsSnapshot.sort((a, b) => b.bookedAt.getTime() - a.bookedAt.getTime());
+      resolve(sortedBookings);
+    }, 300); // Simulate network delay
   });
 }
+
