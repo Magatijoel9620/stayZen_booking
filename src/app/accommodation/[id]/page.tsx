@@ -11,10 +11,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast"; // Added
 
 export default function AccommodationDetailPage() {
   const params = useParams();
   const id = params.id as string;
+  const { toast } = useToast(); // Added
 
   const [accommodation, setAccommodation] = useState<Accommodation | null | undefined>(undefined); // undefined for loading, null for not found
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -36,6 +38,13 @@ export default function AccommodationDetailPage() {
       fetchAccommodation();
     }
   }, [id]);
+
+  const handleBookNow = () => { // Added
+    toast({
+      title: "Booking Feature",
+      description: "Booking functionality coming soon!",
+    });
+  };
 
   if (isLoading) {
     return (
@@ -139,7 +148,11 @@ export default function AccommodationDetailPage() {
               ${accommodation.pricePerNight}
               <span className="text-base font-normal text-muted-foreground">/night</span>
             </p>
-            <Button size="lg" className="w-full md:w-auto bg-cta hover:bg-cta/90 text-primary-foreground">
+            <Button 
+              size="lg" 
+              className="w-full md:w-auto bg-cta hover:bg-cta/90 text-primary-foreground"
+              onClick={handleBookNow} // Added onClick handler
+            >
               <Icons.calendarDays className="mr-2 h-5 w-5" />
               Book Now
             </Button>
@@ -149,3 +162,4 @@ export default function AccommodationDetailPage() {
     </div>
   );
 }
+
