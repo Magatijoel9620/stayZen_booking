@@ -13,6 +13,7 @@ import {
   Home,
   LayoutGrid,
   Loader2,
+  LogOut, // Added LogOut
   Mail,
   MapPin,
   MessageSquare,
@@ -64,6 +65,7 @@ const Icons = {
   layoutGrid: LayoutGrid,
   light: Sun,
   loader: Loader2,
+  logOut: LogOut, // Added LogOut
   mail: Mail,
   mapPin: MapPin,
   messageSquare: MessageSquare,
