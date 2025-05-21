@@ -1,3 +1,4 @@
+
 /**
  * Represents a geographical location.
  */
@@ -19,7 +20,7 @@ export interface Accommodation {
   /**
    * The unique identifier for the accommodation.
    */
-id: string;
+  id: string;
   /**
    * The name of the accommodation.
    */
@@ -40,6 +41,22 @@ id: string;
    * Image URLs of the accommodations
    */
   imageUrls: string[];
+  /**
+   * Type of accommodation, e.g., 'Apartment', 'Hotel', 'Villa'.
+   */
+  type: string;
+  /**
+   * Star rating of the accommodation.
+   */
+  rating: number;
+  /**
+   * Number of reviews.
+   */
+  reviewsCount: number;
+  /**
+   * List of amenities.
+   */
+  amenities: string[];
 }
 
 /**
@@ -64,6 +81,46 @@ export interface AccommodationSearchCriteria {
   numberOfGuests: number;
 }
 
+const accommodations_data: Accommodation[] = [
+  {
+    id: '1',
+    name: 'Cozy Downtown Apartment',
+    description: 'A charming and centrally located apartment, perfect for city explorers. Features a fully equipped kitchen and a comfortable living space.',
+    location: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+    pricePerNight: 150,
+    imageUrls: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png?a=2'],
+    type: 'Apartment',
+    rating: 4.5,
+    reviewsCount: 120,
+    amenities: ['WiFi', 'Kitchen', 'Air Conditioning', 'TV', 'Free Parking'],
+  },
+  {
+    id: '2',
+    name: 'Luxury Beachfront Villa',
+    description: 'Experience luxury with stunning ocean views. This villa offers a private pool, direct beach access, and spacious rooms.',
+    location: { lat: 33.9934, lng: -118.4792 }, // Santa Monica
+    pricePerNight: 450,
+    imageUrls: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png?b=2'],
+    type: 'Villa',
+    rating: 4.9,
+    reviewsCount: 250,
+    amenities: ['WiFi', 'Pool', 'Beach Access', 'Parking', 'Gym'],
+  },
+  {
+    id: '3',
+    name: 'Rustic Mountain Cabin',
+    description: 'Escape to this peaceful cabin in the mountains. Ideal for hiking, relaxing, and enjoying nature. Features a cozy fireplace.',
+    location: { lat: 34.2014, lng: -117.0718 }, // Big Bear Lake
+    pricePerNight: 200,
+    imageUrls: ['https://placehold.co/600x400.png', 'https://placehold.co/600x400.png?c=2'],
+    type: 'Cabin',
+    rating: 4.7,
+    reviewsCount: 90,
+    amenities: ['WiFi', 'Fireplace', 'Hiking Trails', 'Pet-friendly', 'BBQ Grill'],
+  },
+];
+
+
 /**
  * Asynchronously retrieves available accommodations based on the provided search criteria.
  *
@@ -73,26 +130,31 @@ export interface AccommodationSearchCriteria {
 export async function getAvailableAccommodations(
   searchCriteria: AccommodationSearchCriteria
 ): Promise<Accommodation[]> {
-  // TODO: Implement this by calling an external API.
+  // Simulate filtering based on criteria (e.g., number of guests, dates)
+  console.log("Searching with criteria:", searchCriteria);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Basic filtering example (can be expanded)
+      const filtered = accommodations_data.filter(acc => {
+        // Add more complex filtering logic here if needed, e.g., date availability
+        return true; // For now, return all that match guest count (if it were implemented)
+      });
+      resolve(filtered);
+    }, 500); // Simulate network delay
+  });
+}
 
-  const stubbedLocation: Location = { lat: 34.0522, lng: -118.2437 };
-
-  return [
-    {
-      id: '1',
-      name: 'Cozy Apartment',
-      description: 'A cozy apartment in downtown.',
-      location: stubbedLocation,
-      pricePerNight: 120,
-      imageUrls: ['https://example.com/apartment1.jpg', 'https://example.com/apartment2.jpg'],
-    },
-    {
-      id: '2',
-      name: 'Luxury Hotel Room',
-      description: 'A luxurious hotel room with a view.',
-      location: stubbedLocation,
-      pricePerNight: 300,
-      imageUrls: ['https://example.com/hotel1.jpg', 'https://example.com/hotel2.jpg'],
-    },
-  ];
+/**
+ * Asynchronously retrieves a specific accommodation by its ID.
+ *
+ * @param id The ID of the accommodation to retrieve.
+ * @returns A promise that resolves to an Accommodation object if found, or undefined.
+ */
+export async function getAccommodationById(id: string): Promise<Accommodation | undefined> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const accommodation = accommodations_data.find(acc => acc.id === id);
+      resolve(accommodation);
+    }, 300); // Simulate network delay
+  });
 }
