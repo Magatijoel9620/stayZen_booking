@@ -39,6 +39,7 @@ import {
   AlertTriangle, // For error states
   RefreshCw,     // For "Try Again" buttons
   CalendarX,     // For "No Bookings" or "No Favorites"
+  Image, // For placeholder image icon
 } from 'lucide-react';
 
 const Icons = {
@@ -82,6 +83,7 @@ const Icons = {
   alertTriangle: AlertTriangle,
   refreshCw: RefreshCw,
   calendarX: CalendarX,
+  image: Image,
 };
 
 export {Icons};
