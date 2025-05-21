@@ -3,9 +3,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet"; // Added SheetTitle
 import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons"; // Updated import
+import { Icons } from "@/components/icons";
 
 const BottomSheetMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +20,7 @@ const BottomSheetMenu = () => {
             </Button>
           </SheetTrigger>
           <SheetContent className="sm:max-w-sm">
+            <SheetTitle className="sr-only">Navigation Menu</SheetTitle> {/* Added visually hidden title */}
             <div className="grid gap-3 py-4">
               <Link href="/" passHref>
                 <SheetClose asChild>
