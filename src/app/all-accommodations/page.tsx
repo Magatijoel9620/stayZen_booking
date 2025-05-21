@@ -3,6 +3,14 @@
 
 import AccommodationList from "@/components/AccommodationList";
 import { Icons } from "@/components/icons";
+import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// export const metadata = generatePageMetadata({
+//   title: 'All Accommodations - StayZen',
+//   description: 'Browse our full catalog of hotels, villas, and apartments.',
+// });
+
 
 export default function AllAccommodationsPage() {
   return (

@@ -4,10 +4,18 @@
 import { AccommodationSearchCriteria } from "@/services/accommodation";
 import AccommodationList from "@/components/AccommodationList";
 import DateSelection from "@/components/DateSelection";
-import FavoriteAccommodationsPreview from "@/components/FavoriteAccommodationsPreview"; // New import
+import FavoriteAccommodationsPreview from "@/components/FavoriteAccommodationsPreview";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
+import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// export const metadata = generatePageMetadata({
+//   title: 'Home - StayZen',
+//   description: 'Find and book your perfect stay. Search for hotels, villas, and apartments on StayZen.',
+// });
+
 
 export default function Home() {
   const [searchCriteria, setSearchCriteria] = useState<AccommodationSearchCriteria | null>(null);

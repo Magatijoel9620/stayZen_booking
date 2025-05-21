@@ -3,6 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
+import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// export const metadata = generatePageMetadata({
+//   title: 'My Profile - StayZen',
+//   description: 'View and manage your StayZen user profile.',
+// });
+
 
 export default function ProfilePage() {
   return (

@@ -15,6 +15,43 @@ import { Icons } from "@/components/icons";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { parseISO, isValid, format } from "date-fns";
+// import type { Metadata, ResolvingMetadata } from 'next';
+// import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// type Props = {
+//   params: { id: string };
+//   searchParams: { [key: string]: string | string[] | undefined };
+// };
+
+// export async function generateMetadata(
+//   { params }: Props,
+//   parent: ResolvingMetadata
+// ): Promise<Metadata> {
+//   const id = params.id;
+//   const accommodation = await getAccommodationById(id); // Ensure this function can be called server-side or fetch data statically
+
+//   if (!accommodation) {
+//     return generatePageMetadata({
+//       title: 'Accommodation Not Found - StayZen',
+//     });
+//   }
+
+//   return generatePageMetadata({
+//     title: `${accommodation.name} - StayZen`,
+//     description: accommodation.description,
+//     openGraph: {
+//       title: accommodation.name,
+//       description: accommodation.description,
+//       images: accommodation.imageUrls.length > 0 ? [{ url: accommodation.imageUrls[0], alt: accommodation.name }] : [],
+//     },
+//     twitter: {
+//        title: accommodation.name,
+//        description: accommodation.description,
+//        images: accommodation.imageUrls.length > 0 ? [accommodation.imageUrls[0]] : [],
+//     }
+//   });
+// }
+
 
 function AccommodationDetailContent() {
   const params = useParams();

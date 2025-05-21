@@ -10,8 +10,16 @@ import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Accommodation } from "@/services/accommodation";
-import { getFavoriteAccommodations, removeFromFavorites, isFavorite as checkIsFavorite } from "@/services/favorites";
+import { getFavoriteAccommodations, removeFromFavorites } from "@/services/favorites";
 import { useToast } from "@/hooks/use-toast";
+import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// export const metadata = generatePageMetadata({
+//   title: 'My Favorites - StayZen',
+//   description: 'View and manage your favorite accommodations.',
+// });
+
 
 export default function FavoritesPage() {
   const [favoriteAccommodations, setFavoriteAccommodations] = useState<Accommodation[]>([]);
@@ -24,9 +32,7 @@ export default function FavoritesPage() {
     setError(null);
     try {
       const data = await getFavoriteAccommodations();
-      // Attach isFavorited status locally for UI rendering, since all items here are favorites by definition
-      const accommodationsWithStatus = data.map(acc => ({ ...acc, isFavoritedDynamic: true }));
-      setFavoriteAccommodations(accommodationsWithStatus as any); // Cast to handle local state extension
+      setFavoriteAccommodations(data);
     } catch (err: any) {
       setError(err.message || "Failed to load favorites.");
       setFavoriteAccommodations([]);
@@ -90,9 +96,14 @@ export default function FavoritesPage() {
 
   if (error) {
     return (
-      <div className="text-center text-destructive">
-        <p>Error loading favorites: {error}</p>
-        <Button onClick={fetchFavorites} className="mt-4">Try Again</Button>
+      <div className="text-center text-destructive py-10">
+        <Icons.alertTriangle className="h-12 w-12 mx-auto mb-4 text-destructive" />
+        <p className="text-xl font-semibold">Error loading favorites</p>
+        <p className="text-muted-foreground mb-4">{error}</p>
+        <Button onClick={fetchFavorites} className="mt-4">
+          <Icons.refreshCw className="mr-2 h-4 w-4" />
+          Try Again
+        </Button>
       </div>
     );
   }
@@ -107,9 +118,10 @@ export default function FavoritesPage() {
       </div>
 
       {favoriteAccommodations.length === 0 ? (
-        <Card className="shadow-lg text-center">
-          <CardHeader>
-            <CardTitle>No Favorites Yet</CardTitle>
+        <Card className="shadow-lg text-center py-10">
+          <CardHeader className="pt-0">
+            <Icons.calendarX className="h-16 w-16 mx-auto mb-4 text-muted-foreground" />
+            <CardTitle className="text-2xl">No Favorites Yet</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground mb-4">

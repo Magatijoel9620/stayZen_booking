@@ -8,10 +8,16 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import type { Booking } from "@/services/booking";
 import { getBookingsByUserId } from "@/services/booking";
 import { format } from "date-fns";
+import type { Metadata } from 'next';
+import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+
+// export const metadata = generatePageMetadata({
+//   title: 'My Bookings - StayZen',
+//   description: 'View and manage your accommodation bookings.',
+// });
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
