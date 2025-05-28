@@ -177,18 +177,21 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
 
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
-      {accommodations.map((accommodation) => (
+      {accommodations.map((accommodation) => {
+        const hint = accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior";
+        const imageUrl = `https://source.unsplash.com/600x400/?${hint.split(' ').join(',')}`;
+        return (
         <Link key={accommodation.id} href={buildAccommodationLink(accommodation.id)} passHref className="group">
           <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
             <div className="relative w-full h-48">
-              {accommodation.imageUrls.length > 0 && (
+              {accommodation.imageUrls.length > 0 && ( // This condition can be removed
                 <Image
-                  src={accommodation.imageUrls[0]}
+                  src={imageUrl}
                   alt={accommodation.name}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
-                  data-ai-hint={accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior"}
+                  data-ai-hint={hint}
                 />
               )}
               <Button
@@ -222,10 +225,10 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
             </CardFooter>
           </Card>
         </Link>
-      ))}
+      );
+    })}
     </div>
   );
 };
 
 export default AccommodationList;
-

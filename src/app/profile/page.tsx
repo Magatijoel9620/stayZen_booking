@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import Image from "next/image"; // Import next/image
 
 // import type { Metadata } from 'next';
 // import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
@@ -84,13 +85,17 @@ export default function ProfilePage() {
     router.push('/');
   };
 
+  const avatarHint = "person avatar";
+  const avatarImageUrl = `https://source.unsplash.com/100x100/?${avatarHint.split(' ').join(',')}&face`; // Added &face for better results
 
   return (
     <>
       <Card className="shadow-lg max-w-lg mx-auto">
         <CardHeader className="items-center text-center pt-6 pb-4">
           <Avatar className="h-24 w-24 mb-4 border-2 border-primary/20 shadow-sm">
-            <AvatarImage src={`https://placehold.co/100x100.png?text=${userName.charAt(0).toUpperCase()}`} alt={`${userName}'s Avatar`} data-ai-hint="person avatar" />
+            <AvatarImage asChild src={avatarImageUrl} alt={`${userName}'s Avatar`} >
+                <Image src={avatarImageUrl} alt={`${userName}'s Avatar`} width={100} height={100} data-ai-hint={avatarHint}/>
+            </AvatarImage>
             <AvatarFallback className="text-2xl bg-muted">
               {userName ? userName.charAt(0).toUpperCase() : "U"}
             </AvatarFallback>

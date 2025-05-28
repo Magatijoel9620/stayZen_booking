@@ -210,19 +210,22 @@ function AccommodationDetailContent() {
   }
 
   const canBook = checkInDate && checkOutDate && numberOfGuests && numberOfGuests > 0;
+  const hint = accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior";
+  const imageUrl = `https://source.unsplash.com/1200x800/?${hint.split(' ').join(',')}`;
+
 
   return (
     <Card className="shadow-lg overflow-hidden">
       <CardHeader className="p-0">
         <div className="relative w-full h-64 sm:h-72 md:h-96">
-          {accommodation.imageUrls.length > 0 && (
+          {accommodation.imageUrls.length > 0 && ( // This condition can be removed if we always use Unsplash
             <Image
-              src={accommodation.imageUrls[0]}
+              src={imageUrl}
               alt={accommodation.name}
               layout="fill"
               objectFit="cover"
               priority
-              data-ai-hint={accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior"}
+              data-ai-hint={hint}
             />
           )}
         </div>

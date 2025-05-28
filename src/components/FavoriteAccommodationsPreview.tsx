@@ -87,18 +87,21 @@ export default function FavoriteAccommodationsPreview() {
   return (
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {favorites.map((accommodation) => (
+        {favorites.map((accommodation) => {
+          const hint = accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior";
+          const imageUrl = `https://source.unsplash.com/400x300/?${hint.split(' ').join(',')}`;
+          return (
           <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`} passHref>
             <Card className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col cursor-pointer group">
               <div className="relative w-full h-32 sm:h-36">
-                {accommodation.imageUrls.length > 0 ? (
+                {accommodation.imageUrls.length > 0 ? ( // This condition can be removed
                   <Image
-                    src={accommodation.imageUrls[0]}
+                    src={imageUrl}
                     alt={accommodation.name}
                     layout="fill"
                     objectFit="cover"
                     className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
-                    data-ai-hint={accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior"}
+                    data-ai-hint={hint}
                   />
                 ) : (
                   <div className="w-full h-full bg-muted flex items-center justify-center rounded-t-lg">
@@ -120,7 +123,8 @@ export default function FavoriteAccommodationsPreview() {
               </CardContent>
             </Card>
           </Link>
-        ))}
+        );
+      })}
       </div>
       {totalFavoritesCount > MAX_FAVORITES_TO_SHOW && (
         <div className="mt-6 text-center">
@@ -135,4 +139,3 @@ export default function FavoriteAccommodationsPreview() {
     </div>
   );
 }
-

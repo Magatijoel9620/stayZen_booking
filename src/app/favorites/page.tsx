@@ -137,18 +137,21 @@ export default function FavoritesPage() {
         </Card>
       ) : (
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {favoriteAccommodations.map((accommodation) => (
+          {favoriteAccommodations.map((accommodation) => {
+            const hint = accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior";
+            const imageUrl = `https://source.unsplash.com/600x400/?${hint.split(' ').join(',')}`;
+            return (
             <Card key={accommodation.id} className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
               <Link href={`/accommodation/${accommodation.id}`} passHref className="block">
                 <div className="relative w-full h-48">
-                  {accommodation.imageUrls.length > 0 && (
+                  {accommodation.imageUrls.length > 0 && ( // This condition can be removed
                     <Image
-                      src={accommodation.imageUrls[0]}
+                      src={imageUrl}
                       alt={accommodation.name}
                       layout="fill"
                       objectFit="cover"
                       className="rounded-t-lg"
-                      data-ai-hint={accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior"}
+                      data-ai-hint={hint}
                     />
                   )}
                 </div>
@@ -177,7 +180,8 @@ export default function FavoritesPage() {
                 </Button>
               </CardFooter>
             </Card>
-          ))}
+            );
+          })}
         </div>
       )}
     </>

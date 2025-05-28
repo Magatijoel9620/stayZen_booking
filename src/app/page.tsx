@@ -17,18 +17,21 @@ export default function Home() {
     setSearchCriteria(criteria);
   };
 
+  const heroHint = "tropical beach";
+  const heroImageUrl = `https://source.unsplash.com/1600x900/?${heroHint.split(' ').join(',')}`;
+
   return (
     <div className="space-y-12 md:space-y-16"> {/* Overall spacing for sections */}
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[350px] sm:h-[60vh] md:h-[70vh] flex items-center justify-center text-center rounded-xl overflow-hidden shadow-2xl">
         <Image
-          src="https://placehold.co/1600x900.png" 
+          src={heroImageUrl} 
           alt="Beautiful travel destination"
           layout="fill"
           objectFit="cover"
           priority
           className="z-0"
-          data-ai-hint="tropical beach" 
+          data-ai-hint={heroHint} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10" /> {/* Gradient overlay for better text readability */}
         <div className="relative z-20 p-4 sm:p-8 text-white max-w-4xl">

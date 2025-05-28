@@ -94,17 +94,20 @@ export default function BookingsPage() {
         </Card>
       ) : (
         <div className="space-y-6">
-          {bookings.map((booking) => (
+          {bookings.map((booking) => {
+            const hint = "hotel room"; // Or derive from booking.accommodationType if available
+            const imageUrl = `https://source.unsplash.com/400x300/?${hint.split(' ').join(',')}`;
+            return (
             <Card key={booking.id} className="shadow-lg overflow-hidden transition-shadow hover:shadow-xl">
               <div className="md:flex">
                 <div className="md:w-1/3 relative h-48 md:h-auto min-h-[150px] md:min-h-full">
                   <Image
-                    src={booking.accommodationImage || 'https://placehold.co/400x300.png'}
+                    src={imageUrl} // Use Unsplash URL
                     alt={booking.accommodationName}
                     layout="fill"
                     objectFit="cover"
                     className="md:rounded-l-lg md:rounded-tr-none rounded-t-lg"
-                    data-ai-hint="hotel room"
+                    data-ai-hint={hint}
                   />
                 </div>
                 <div className="md:w-2/3 p-4 sm:p-6 flex flex-col justify-between">
@@ -156,7 +159,8 @@ export default function BookingsPage() {
                 </div>
               </div>
             </Card>
-          ))}
+          );
+        })}
         </div>
       )}
     </>
