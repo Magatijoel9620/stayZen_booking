@@ -17,21 +17,21 @@ export default function Home() {
     setSearchCriteria(criteria);
   };
 
-  const heroHint = "tropical beach";
-  const heroImageUrl = `https://source.unsplash.com/1600x900/?${heroHint.split(' ').join(',')}`;
+  const heroIllustrationHint = "beach illustration";
+  const heroPlaceholderImageUrl = `https://placehold.co/1600x900.png`;
 
   return (
     <div className="space-y-12 md:space-y-16"> {/* Overall spacing for sections */}
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[350px] sm:h-[60vh] md:h-[70vh] flex items-center justify-center text-center rounded-xl overflow-hidden shadow-2xl">
         <Image
-          src={heroImageUrl} 
-          alt="Beautiful travel destination"
+          src={heroPlaceholderImageUrl} 
+          alt="Beautiful travel destination illustration"
           layout="fill"
           objectFit="cover"
           priority
           className="z-0"
-          data-ai-hint={heroHint} 
+          data-ai-hint={heroIllustrationHint} 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10" /> {/* Gradient overlay for better text readability */}
         <div className="relative z-20 p-4 sm:p-8 text-white max-w-4xl">
@@ -44,11 +44,6 @@ export default function Home() {
             Explore unique accommodations, from cozy apartments to luxurious villas.
             Your dream vacation is just a few clicks away.
           </p>
-          {/* You could add a button here to scroll to DateSelection if desired */}
-          {/* <Button size="lg" className="bg-cta hover:bg-cta/90 text-primary-foreground" onClick={() => document.getElementById('date-selection')?.scrollIntoView({ behavior: 'smooth' })}>
-            <Icons.calendarCheck className="mr-2 h-5 w-5" />
-            Plan Your Trip
-          </Button> */}
         </div>
       </section>
 

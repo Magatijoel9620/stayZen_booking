@@ -88,26 +88,20 @@ export default function FavoriteAccommodationsPreview() {
     <div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {favorites.map((accommodation) => {
-          const hint = accommodation.type === 'Apartment' ? "apartment room" : accommodation.type === 'Villa' ? "villa interior" : "cabin interior";
-          const imageUrl = `https://source.unsplash.com/400x300/?${hint.split(' ').join(',')}`;
+          const illustrationHint = accommodation.type === 'Apartment' ? "apartment illustration" : accommodation.type === 'Villa' ? "villa illustration" : "cabin illustration";
+          const placeholderImageUrl = `https://placehold.co/400x300.png`;
           return (
           <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`} passHref>
             <Card className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col cursor-pointer group">
               <div className="relative w-full h-32 sm:h-36">
-                {accommodation.imageUrls.length > 0 ? ( // This condition can be removed
-                  <Image
-                    src={imageUrl}
-                    alt={accommodation.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
-                    data-ai-hint={hint}
-                  />
-                ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center rounded-t-lg">
-                    <Icons.image className="w-12 h-12 text-muted-foreground/50" />
-                  </div>
-                )}
+                <Image
+                  src={placeholderImageUrl}
+                  alt={accommodation.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg group-hover:scale-105 transition-transform duration-300"
+                  data-ai-hint={illustrationHint}
+                />
               </div>
               <CardHeader className="p-3 pb-1 flex-grow">
                 <CardTitle className="text-base font-semibold truncate group-hover:text-primary transition-colors">

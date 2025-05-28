@@ -85,16 +85,16 @@ export default function ProfilePage() {
     router.push('/');
   };
 
-  const avatarHint = "person avatar";
-  const avatarImageUrl = `https://source.unsplash.com/100x100/?${avatarHint.split(' ').join(',')}&face`; // Added &face for better results
+  const avatarIllustrationHint = "avatar illustration";
+  const avatarPlaceholderImageUrl = `https://placehold.co/100x100.png`;
 
   return (
     <>
       <Card className="shadow-lg max-w-lg mx-auto">
         <CardHeader className="items-center text-center pt-6 pb-4">
           <Avatar className="h-24 w-24 mb-4 border-2 border-primary/20 shadow-sm">
-            <AvatarImage asChild src={avatarImageUrl} alt={`${userName}'s Avatar`} >
-                <Image src={avatarImageUrl} alt={`${userName}'s Avatar`} width={100} height={100} data-ai-hint={avatarHint}/>
+            <AvatarImage asChild src={avatarPlaceholderImageUrl} alt={`${userName}'s Avatar illustration`} >
+                <Image src={avatarPlaceholderImageUrl} alt={`${userName}'s Avatar illustration`} width={100} height={100} data-ai-hint={avatarIllustrationHint}/>
             </AvatarImage>
             <AvatarFallback className="text-2xl bg-muted">
               {userName ? userName.charAt(0).toUpperCase() : "U"}

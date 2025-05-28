@@ -11,8 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import type { Booking } from "@/services/booking";
 import { getBookingsByUserId } from "@/services/booking";
 import { format } from "date-fns";
-import type { Metadata } from 'next';
-import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+// import type { Metadata } from 'next';
+// import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
 
 // export const metadata = generatePageMetadata({
 //   title: 'My Bookings - StayZen',
@@ -95,19 +95,19 @@ export default function BookingsPage() {
       ) : (
         <div className="space-y-6">
           {bookings.map((booking) => {
-            const hint = "hotel room"; // Or derive from booking.accommodationType if available
-            const imageUrl = `https://source.unsplash.com/400x300/?${hint.split(' ').join(',')}`;
+            const illustrationHint = "booking illustration"; 
+            const placeholderImageUrl = `https://placehold.co/400x300.png`;
             return (
             <Card key={booking.id} className="shadow-lg overflow-hidden transition-shadow hover:shadow-xl">
               <div className="md:flex">
                 <div className="md:w-1/3 relative h-48 md:h-auto min-h-[150px] md:min-h-full">
                   <Image
-                    src={imageUrl} // Use Unsplash URL
+                    src={placeholderImageUrl}
                     alt={booking.accommodationName}
                     layout="fill"
                     objectFit="cover"
                     className="md:rounded-l-lg md:rounded-tr-none rounded-t-lg"
-                    data-ai-hint={hint}
+                    data-ai-hint={illustrationHint}
                   />
                 </div>
                 <div className="md:w-2/3 p-4 sm:p-6 flex flex-col justify-between">

@@ -12,8 +12,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Accommodation } from "@/services/accommodation";
 import { getFavoriteAccommodations, removeFromFavorites } from "@/services/favorites";
 import { useToast } from "@/hooks/use-toast";
-import type { Metadata } from 'next';
-import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
+// import type { Metadata } from 'next';
+// import { generatePageMetadata } from '@/metadata'; // Adjust path as necessary
 
 // export const metadata = generatePageMetadata({
 //   title: 'My Favorites - StayZen',
@@ -138,22 +138,20 @@ export default function FavoritesPage() {
       ) : (
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {favoriteAccommodations.map((accommodation) => {
-            const hint = accommodation.type === 'Apartment' ? "apartment exterior" : accommodation.type === 'Villa' ? "villa exterior" : "cabin exterior";
-            const imageUrl = `https://source.unsplash.com/600x400/?${hint.split(' ').join(',')}`;
+            const illustrationHint = accommodation.type === 'Apartment' ? "apartment illustration" : accommodation.type === 'Villa' ? "villa illustration" : "cabin illustration";
+            const placeholderImageUrl = `https://placehold.co/600x400.png`;
             return (
             <Card key={accommodation.id} className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300">
               <Link href={`/accommodation/${accommodation.id}`} passHref className="block">
                 <div className="relative w-full h-48">
-                  {accommodation.imageUrls.length > 0 && ( // This condition can be removed
-                    <Image
-                      src={imageUrl}
-                      alt={accommodation.name}
-                      layout="fill"
-                      objectFit="cover"
-                      className="rounded-t-lg"
-                      data-ai-hint={hint}
-                    />
-                  )}
+                  <Image
+                    src={placeholderImageUrl}
+                    alt={accommodation.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-t-lg"
+                    data-ai-hint={illustrationHint}
+                  />
                 </div>
               </Link>
               <CardHeader className="pb-2">
