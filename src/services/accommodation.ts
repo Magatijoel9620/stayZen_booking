@@ -95,7 +95,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'A charming and centrally located apartment, perfect for city explorers. Features a fully equipped kitchen and a comfortable living space.',
       location: { lat: 34.0522, lng: -118.2437 }, // Los Angeles
       pricePerNight: 150,
-      imageUrls: ['https://placehold.co/600x400.png?text=Apt1', 'https://placehold.co/600x400.png?text=Apt1-Room2'],
+      imageUrls: ['/assets/Rustic_Elegance_Lounge.png'],
       type: 'Apartment',
       rating: 4.5,
       reviewsCount: 120,
@@ -107,7 +107,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'Experience luxury with stunning ocean views. This villa offers a private pool, direct beach access, and spacious rooms.',
       location: { lat: 33.9934, lng: -118.4792 }, // Santa Monica
       pricePerNight: 450,
-      imageUrls: ['https://placehold.co/600x400.png?text=Villa1', 'https://placehold.co/600x400.png?text=Villa1-Pool'],
+      imageUrls: ['/assets/Rustic_Loft.png'],
       type: 'Villa',
       rating: 4.9,
       reviewsCount: 250,
@@ -119,7 +119,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'Escape to this peaceful cabin in the mountains. Ideal for hiking, relaxing, and enjoying nature. Features a cozy fireplace.',
       location: { lat: 34.2014, lng: -117.0718 }, // Big Bear Lake
       pricePerNight: 200,
-      imageUrls: ['https://placehold.co/600x400.png?text=Cabin1', 'https://placehold.co/600x400.png?text=Cabin1-View'],
+      imageUrls: ['/assets/Rustic_Elegance_Lounge.png'],
       type: 'Cabin',
       rating: 4.7,
       reviewsCount: 90,
@@ -131,7 +131,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'A stylish loft in the heart of the business district, offering panoramic city views and modern amenities.',
       location: { lat: 40.7128, lng: -74.0060 }, // New York
       pricePerNight: 280,
-      imageUrls: ['https://placehold.co/600x400.png?text=Loft1', 'https://placehold.co/600x400.png?text=Loft1-Interior'],
+      imageUrls: ['/assets/Rustic_Loft.png'],
       type: 'Loft',
       rating: 4.6,
       reviewsCount: 150,
@@ -143,7 +143,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'A quaint inn nestled in rolling hills, perfect for a relaxing getaway. Includes breakfast and garden access.',
       location: { lat: 36.5800, lng: -1.7829 }, // Somewhere in Europe (Almeria, Spain as example)
       pricePerNight: 120,
-      imageUrls: ['https://placehold.co/600x400.png?text=Inn1', 'https://placehold.co/600x400.png?text=Inn1-Garden'],
+      imageUrls: ['/assets/Rustic_Elegance_Lounge.png'],
       type: 'Inn',
       rating: 4.8,
       reviewsCount: 75,
@@ -155,7 +155,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'A unique treehouse-style retreat deep in the forest. Disconnect and recharge in nature. Minimalist and eco-friendly.',
       location: { lat: 45.5231, lng: -122.6765 }, // Portland, Oregon area
       pricePerNight: 220,
-      imageUrls: ['https://placehold.co/600x400.png?text=Retreat1', 'https://placehold.co/600x400.png?text=Retreat1-Forest'],
+      imageUrls: ['/assets/Rustic_Loft.png'],
       type: 'Retreat',
       rating: 4.9,
       reviewsCount: 60,
@@ -167,7 +167,7 @@ if (!globalThis.accommodations_data_store) {
       description: 'Compact and modern studio apartment with a private balcony overlooking the city park. Great for solo travelers or couples.',
       location: { lat: 51.5074, lng: -0.1278 }, // London
       pricePerNight: 180,
-      imageUrls: ['https://placehold.co/600x400.png?text=StudioLDN', 'https://placehold.co/600x400.png?text=StudioLDN-Balcony'],
+      imageUrls: ['/assets/Rustic_Elegance_Lounge.png'],
       type: 'Studio',
       rating: 4.3,
       reviewsCount: 88,

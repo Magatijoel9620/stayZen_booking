@@ -212,7 +212,7 @@ function AccommodationDetailContent() {
   const canBook = checkInDate && checkOutDate && numberOfGuests && numberOfGuests > 0;
   
   const illustrationHint = accommodation.type === 'Apartment' ? "apartment illustration" : accommodation.type === 'Villa' ? "villa illustration" : "cabin illustration";
-  const placeholderImageUrl = `https://placehold.co/1200x800.png`;
+  
 
 
   return (
@@ -220,7 +220,7 @@ function AccommodationDetailContent() {
       <CardHeader className="p-0">
         <div className="relative w-full h-64 sm:h-72 md:h-96">
           <Image
-            src={placeholderImageUrl}
+            src={accommodation.imageUrls[0]}
             alt={accommodation.name}
             layout="fill"
             objectFit="cover"

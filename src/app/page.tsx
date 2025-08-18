@@ -25,7 +25,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[50vh] min-h-[350px] sm:h-[60vh] md:h-[70vh] flex items-center justify-center text-center rounded-xl overflow-hidden shadow-2xl">
         <Image
-          src={heroPlaceholderImageUrl} 
+          src="/assets/Mediterranean_Villa.png"
           alt="Beautiful travel destination illustration"
           layout="fill"
           objectFit="cover"

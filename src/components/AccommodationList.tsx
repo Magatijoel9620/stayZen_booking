@@ -179,13 +179,13 @@ const AccommodationList: React.FC<AccommodationListProps> = ({ searchCriteria })
     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
       {accommodations.map((accommodation) => {
         const illustrationHint = accommodation.type === 'Apartment' ? "apartment illustration" : accommodation.type === 'Villa' ? "villa illustration" : "cabin illustration";
-        const placeholderImageUrl = `https://placehold.co/600x400.png`;
+        
         return (
         <Link key={accommodation.id} href={buildAccommodationLink(accommodation.id)} passHref className="group">
           <Card className="flex flex-col h-full overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
             <div className="relative w-full h-48">
               <Image
-                src={placeholderImageUrl}
+                src={accommodation.imageUrls[0]}
                 alt={accommodation.name}
                 layout="fill"
                 objectFit="cover"
