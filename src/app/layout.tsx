@@ -1,5 +1,6 @@
 
 import type {Metadata} from 'next';
+import Image from 'next/image';
 import {Geist, Geist_Mono} from 'next/font/google';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
@@ -46,7 +47,10 @@ export default function RootLayout({
           <div className="flex flex-col min-h-screen">
             <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
               <div className="container mx-auto flex h-16 items-center justify-between p-4">
-                <h1 className="text-2xl font-bold text-primary">StayZen</h1>
+                <div className="flex items-center gap-2">
+                  <Image src="/icons/stayzen.png" alt="StayZen logo" width={32} height={32} />
+                  <h1 className="text-2xl font-bold text-primary">StayZen</h1>
+                </div>
                 <ThemeToggle />
               </div>
             </header>
