@@ -33,6 +33,8 @@ export default function RootLayout({
        <head>
         <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
         <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+        <link rel="icon" href="/icons/stayzen.png" type="image/png" sizes="any" />
+        <link rel="apple-touch-icon" href="/icons/stayzen.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProviderComponent
