@@ -89,13 +89,12 @@ export default function FavoriteAccommodationsPreview() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {favorites.map((accommodation) => {
           const illustrationHint = accommodation.type === 'Apartment' ? "apartment illustration" : accommodation.type === 'Villa' ? "villa illustration" : "cabin illustration";
-          const placeholderImageUrl = `https://placehold.co/400x300.png`;
           return (
           <Link key={accommodation.id} href={`/accommodation/${accommodation.id}`} passHref>
             <Card className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 h-full flex flex-col cursor-pointer group">
               <div className="relative w-full h-32 sm:h-36">
                 <Image
-                  src={placeholderImageUrl}
+                  src={accommodation.imageUrls[0]}
                   alt={accommodation.name}
                   layout="fill"
                   objectFit="cover"
