@@ -9,6 +9,7 @@ This is a Next.js web application for finding and booking accommodations, built 
 *   **Language**: TypeScript
 *   **UI Components**: ShadCN UI
 *   **Styling**: Tailwind CSS
+*   **PWA**: `@ducanh2912/next-pwa` for Progressive Web App capabilities
 *   **State Management (UI)**: React Hooks (useState, useEffect, useContext)
 *   **Data Fetching/Mutation (UI)**: Async/await with services, React Hooks
 *   **In-memory Data Store**: For services (accommodations, bookings, favorites) using `globalThis` for persistence in development.
@@ -21,6 +22,7 @@ This is a Next.js web application for finding and booking accommodations, built 
 ## Features
 
 ### User-Facing Application:
+*   **Progressive Web App (PWA)**: The application can be installed on a user's device for an app-like experience and offline accessibility.
 *   **Browse Accommodations**: View all available accommodations or search based on dates and number of guests.
 *   **Detailed View**: Click on an accommodation to see detailed information, including images, description, amenities, price, and rating.
 *   **Booking System**:
@@ -111,7 +113,7 @@ This is a Next.js web application for finding and booking accommodations, built 
 *   `src/ai/`: Contains Genkit related AI flows and configurations.
 *   `src/hooks/`: Custom React hooks (e.g., `useToast`, `useIsMobile`).
 *   `src/lib/`: Utility functions (e.g., `cn` for classnames).
-*   `public/`: Static assets.
+*   `public/`: Static assets, including PWA manifest and icons.
 *   `src/metadata.ts`: Centralized metadata configuration for pages.
 
 ## Available Scripts
@@ -135,4 +137,3 @@ This is a Next.js web application for finding and booking accommodations, built 
 *   Enhance admin dashboard with user management, analytics, and more detailed controls.
 *   Refine UI/UX details and add animations/transitions for a more polished feel.
 *   Implement image uploading for accommodations instead of URL inputs.
-```
