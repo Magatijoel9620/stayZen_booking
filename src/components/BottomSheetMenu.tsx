@@ -11,7 +11,7 @@ const BottomSheetMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-0 left-0 w-full p-4 bg-background/70 z-50">
+    <div className="md:hidden fixed bottom-0 left-0 w-full p-4 bg-background/70 z-50">
       <div className="flex justify-center">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
@@ -19,7 +19,7 @@ const BottomSheetMenu = () => {
               <Icons.menu className="w-8 h-8" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="sm:max-w-sm">
+          <SheetContent side="bottom" className="sm:max-w-sm">
             <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
             <div className="grid gap-3 py-4">
               <Link href="/" passHref>

@@ -8,6 +8,8 @@ import { Toaster } from "@/components/ui/toaster";
 import BottomSheetMenu from '@/components/BottomSheetMenu';
 import { ThemeProviderComponent } from '@/components/ThemeProviderComponent';
 import ThemeToggle from '@/components/ThemeToggle';
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/icons';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -52,7 +54,24 @@ export default function RootLayout({
                   <Image src="/icons/stayzen.png" alt="StayZen logo" width={32} height={32} />
                   <h1 className="text-2xl font-bold text-primary">StayZen</h1>
                 </Link>
-                <ThemeToggle />
+                
+                <div className="flex items-center gap-2">
+                  <nav className="hidden md:flex gap-2">
+                    <Button variant="ghost" asChild>
+                      <Link href="/all-accommodations">All Stays</Link>
+                    </Button>
+                    <Button variant="ghost" asChild>
+                      <Link href="/bookings">My Bookings</Link>
+                    </Button>
+                     <Button variant="ghost" asChild>
+                      <Link href="/favorites">Favorites</Link>
+                    </Button>
+                     <Button variant="ghost" asChild>
+                      <Link href="/profile">Profile</Link>
+                    </Button>
+                  </nav>
+                  <ThemeToggle />
+                </div>
               </div>
             </header>
             <main className="flex-1 container mx-auto p-4 pb-32">
